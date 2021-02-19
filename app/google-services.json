@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "4613146510",
+    "project_id": "readdit-78c3f",
+    "storage_bucket": "readdit-78c3f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:4613146510:android:04ee66d6d5d80ecb26c6df",
+        "android_client_info": {
+          "package_name": "com.example.readdit"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "4613146510-qm5jl625bfdp8l09fbp2m8sqkm4cvvrs.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBDTITg5HYSocwk9fd0LqYlg8Q-MkShhyo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "4613146510-qm5jl625bfdp8l09fbp2m8sqkm4cvvrs.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
