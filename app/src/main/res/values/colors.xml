@@ -7,4 +7,25 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    
+    <!--App colors-->
+    <color name="indigo_500">#FF3F51B5</color>
+    <color name="indigo_100">#FFC5CAE9</color>
+    <color name="indigo_700">#FF303F9F</color>
+    <color name="pink_a200">#FFFF4081</color>
+    <color name="pink_a100">#FFFF80AB</color>
+    <color name="pink_a400">#FFF50057</color>
+
+    <!--App Alternative-->
+    <color name="indigo">#FF3F51B5</color>
+    <color name="indigo_dark">#FF002984</color>
+    <color name="indigo_light">#FF757DE8</color>
+    <color name="blue_gray">#FF455A64</color>
+    <color name="blue_gray_dark">#FF1C313A</color>
+    <color name="blue_gray_light">#FF718792</color>
+
+    <!--App Alternative2-->
+    <color name="pink">#FFFF4081</color>
+    <color name="pink_dark">#FFFF79B0</color>
+    <color name="pink_light">#FFC60055</color>
 </resources>
