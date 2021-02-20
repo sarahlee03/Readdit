@@ -61,7 +61,7 @@
 
     <Button
         android:id="@+id/signin_login_btn"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
         android:layout_marginTop="16dp"
@@ -71,17 +71,53 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/singin_password_layout" />
 
+    <View
+        android:id="@+id/signin_divider1"
+        android:layout_width="0dp"
+        android:layout_height="3dp"
+        android:layout_marginEnd="8dp"
+        android:background="?android:attr/listDivider"
+        app:layout_constraintBottom_toBottomOf="@+id/signin_or_txt"
+        app:layout_constraintEnd_toStartOf="@+id/signin_or_txt"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_chainStyle="spread"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/signin_or_txt" />
+
     <TextView
-        android:id="@+id/signin_signup_link"
+        android:id="@+id/signin_or_txt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
         android:layout_marginTop="32dp"
-        android:layout_marginEnd="24dp"
-        android:text="@string/sign_up_link"
+        android:text="@string/or"
         android:textSize="18sp"
+        app:layout_constraintEnd_toStartOf="@+id/signin_divider2"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/signin_divider1"
+        app:layout_constraintTop_toBottomOf="@+id/signin_login_btn" />
+
+    <View
+        android:id="@+id/signin_divider2"
+        android:layout_width="0dp"
+        android:layout_height="3dp"
+        android:layout_marginStart="8dp"
+        android:background="?android:attr/listDivider"
+        app:layout_constraintBottom_toBottomOf="@+id/signin_or_txt"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/signin_or_txt"
+        app:layout_constraintTop_toTopOf="@+id/signin_or_txt" />
+
+    <Button
+        android:id="@+id/signin_register_btn"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="24dp"
+        android:text="@string/action_register"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/signin_login_btn" />
+        app:layout_constraintTop_toBottomOf="@+id/signin_or_txt" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

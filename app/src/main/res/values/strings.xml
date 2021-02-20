@@ -16,7 +16,8 @@
     <string name="password_field">Password</string>
     <string name="full_name_field">Full Name</string>
     <string name="action_sign_in">Sign In</string>
+    <string name="action_login">Login</string>
     <string name="action_sign_up">Sign Up</string>
-    <string name="sign_up_link">Don\'t have an account? Sign up here</string>
-    <string name="sign_in_link">Already have an account? Sign in here</string>
+    <string name="action_register">Register</string>
+    <string name="or">or</string>
 </resources>
