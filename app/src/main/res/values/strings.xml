@@ -21,4 +21,7 @@
     <string name="action_register">Register</string>
     <string name="or">or</string>
     <string name="sign_in_error">Username or password is incorrect</string>
+
+    <!--Sign Out-->
+    <string name="action_sign_out">Sign Out</string>
 </resources>
