@@ -11,8 +11,4 @@ public class ReadditApplication extends Application {
         super.onCreate();
         context = getApplicationContext();
     }
-
-    public static Context getContext() {
-        return context;
-    }
 }

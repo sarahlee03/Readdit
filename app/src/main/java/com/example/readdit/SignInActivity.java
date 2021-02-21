@@ -37,7 +37,6 @@ public class SignInActivity extends AppCompatActivity {
         if(currentUser != null){
             updateUI();
         }
-
     }
 
     @Override

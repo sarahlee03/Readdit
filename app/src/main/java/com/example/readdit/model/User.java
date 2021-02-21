@@ -24,8 +24,6 @@ public class User {
     private Long lastUpdated;
 
     // region Constructors
-
-
     public User(@NonNull String userID, @NonNull String fullName, @NonNull String email, @NonNull String imageUri) {
         this.userID = userID;
         this.fullName = fullName;
