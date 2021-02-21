@@ -18,4 +18,5 @@
     <color name="pink">#FFFF4081</color>
     <color name="pink_dark">#FFFF79B0</color>
     <color name="pink_light">#FFC60055</color>
+    <color name="red">#FFF44336</color>
 </resources>

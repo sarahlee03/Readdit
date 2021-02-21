@@ -43,15 +43,11 @@ public class SignUpActivity extends AppCompatActivity {
     final int CHOOSE_GALLERY_CODE = 1;
     boolean wasImageSelected = false;
     private FirebaseAuth mAuth;
-    TextInputLayout txtlayoutName;
-    TextInputLayout txtlayoutEmail;
-    TextInputLayout txtlayoutPassword;
-    TextView txtFullName;
-    TextView txtEmail;
-    TextView txtPassword;
-    ImageButton profileImage;
-    Button btnSignUp;
-    ProgressBar pbLoading;
+    private TextInputLayout txtlayoutName;
+    private TextInputLayout txtlayoutEmail;
+    private TextInputLayout txtlayoutPassword;
+    private ImageButton profileImage;
+    private ProgressBar pbLoading;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,11 +59,8 @@ public class SignUpActivity extends AppCompatActivity {
         txtlayoutName = findViewById(R.id.signup_name_layout);
         txtlayoutEmail = findViewById(R.id.signup_email_layout);
         txtlayoutPassword = findViewById(R.id.signup_password_layout);
-        txtFullName = findViewById(R.id.signup_name_input);
-        txtEmail = findViewById(R.id.signup_email_input);
-        txtPassword = findViewById(R.id.signup_password_input);
         profileImage = findViewById(R.id.signup_profile_img);
-        btnSignUp = findViewById(R.id.signup_register_btn);
+
         pbLoading = findViewById(R.id.signup_loading);
 
         profileImage.setOnClickListener(new View.OnClickListener() {
@@ -77,6 +70,7 @@ public class SignUpActivity extends AppCompatActivity {
             }
         });
 
+        Button btnSignUp = findViewById(R.id.signup_register_btn);
         btnSignUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -196,19 +190,19 @@ public class SignUpActivity extends AppCompatActivity {
             return false;
         }
 
-        if(txtFullName.getText().toString().isEmpty()){
+        if(txtlayoutName.getEditText().getText().toString().isEmpty()){
             isValid = false;
             txtlayoutName.setError("Full name cannot be empty");
         }
 
-        String email = txtEmail.getText().toString();
+        String email = txtlayoutEmail.getEditText().getText().toString();
         if(email.isEmpty() || !Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
             isValid = false;
             txtlayoutEmail.setError("Please enter a valid email address");
         }
 
         String passPattern = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=\\S+$).{8,}$";
-        String password = txtPassword.getText().toString();
+        String password = txtlayoutPassword.getEditText().getText().toString();
         if(password.isEmpty() || !Pattern.compile(passPattern).matcher(password).matches()) {
             isValid = false;
             txtlayoutPassword.setError("Password must contain at least 8 characters including UPPER and lower case letters and numbers");
@@ -219,7 +213,7 @@ public class SignUpActivity extends AppCompatActivity {
 
     private void createAccount() {
         pbLoading.setVisibility(View.VISIBLE);
-        mAuth.createUserWithEmailAndPassword(txtEmail.getText().toString(), txtPassword.getText().toString())
+        mAuth.createUserWithEmailAndPassword(txtlayoutEmail.getEditText().getText().toString(), txtlayoutPassword.getEditText().getText().toString())
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
@@ -234,14 +228,14 @@ public class SignUpActivity extends AppCompatActivity {
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        Log.w("TAG", "createUserWithEmail:failure", e.getCause());
+                        pbLoading.setVisibility(View.INVISIBLE);
                         if (e instanceof FirebaseAuthUserCollisionException){
                             txtlayoutEmail.setError(e.getMessage());
                         }
                         else {
                             new AlertDialog.Builder(SignUpActivity.this)
                                     .setTitle("Oops")
-                                    .setMessage("There was a problem during registration, please try again later :(")
+                                    .setMessage("There was a problem while signing you up, please try again later :(")
                                     .setNeutralButton("OK", new DialogInterface.OnClickListener() {
                                         @Override
                                         public void onClick(DialogInterface dialogInterface, int i) {
@@ -250,8 +244,6 @@ public class SignUpActivity extends AppCompatActivity {
                                     })
                                     .show();
                         }
-
-                        pbLoading.setVisibility(View.INVISIBLE);
                     }
                 });
     }
