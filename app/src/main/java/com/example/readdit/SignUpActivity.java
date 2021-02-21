@@ -15,18 +15,19 @@ import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
-import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.readdit.model.Model;
+import com.example.readdit.model.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
@@ -60,7 +61,6 @@ public class SignUpActivity extends AppCompatActivity {
         txtlayoutEmail = findViewById(R.id.signup_email_layout);
         txtlayoutPassword = findViewById(R.id.signup_password_layout);
         profileImage = findViewById(R.id.signup_profile_img);
-
         pbLoading = findViewById(R.id.signup_loading);
 
         profileImage.setOnClickListener(new View.OnClickListener() {
@@ -218,8 +218,7 @@ public class SignUpActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            FirebaseUser user = mAuth.getCurrentUser();
-                            //TODO: Save user with image in firebase
+                            saveUser();
                             pbLoading.setVisibility(View.INVISIBLE);
                             finish();
                         }
@@ -246,5 +245,26 @@ public class SignUpActivity extends AppCompatActivity {
                         }
                     }
                 });
+    }
+
+    private void saveUser() {
+        if (profileImage.getDrawable() != null) {
+            Bitmap bitMap = ((BitmapDrawable) profileImage.getDrawable()).getBitmap();
+            Model.instance.uploadImage(bitMap, mAuth.getCurrentUser().getUid(), new Model.AsyncListener<String>() {
+                @Override
+                public void onComplete(String data) {
+                    if (data != null) {
+                        User user = new User(mAuth.getCurrentUser().getUid(),
+                                txtlayoutName.getEditText().getText().toString(),
+                                txtlayoutEmail.getEditText().getText().toString(),
+                                data);
+                        Model.instance.addUser(user,
+                                data1 -> {
+                                    Model.instance.getAllUsers();
+                                });
+                    }
+                }
+            });
+        }
     }
 }
