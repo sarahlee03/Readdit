@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name">Readdit</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
@@ -10,4 +10,18 @@
     <string name="menu_home">Home</string>
     <string name="menu_gallery">Gallery</string>
     <string name="menu_slideshow">Slideshow</string>
+
+    <!--Sign In/Up-->
+    <string name="email_field">Email</string>
+    <string name="password_field">Password</string>
+    <string name="full_name_field">Full Name</string>
+    <string name="action_sign_in">Sign In</string>
+    <string name="action_login">Login</string>
+    <string name="action_sign_up">Sign Up</string>
+    <string name="action_register">Register</string>
+    <string name="or">or</string>
+    <string name="sign_in_error">Username or password is incorrect</string>
+
+    <!--Sign Out-->
+    <string name="action_sign_out">Sign Out</string>
 </resources>
