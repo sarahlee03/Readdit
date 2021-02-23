@@ -2,6 +2,7 @@ package com.example.readdit.model;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.os.AsyncTask;
 
 import androidx.lifecycle.LiveData;
 
@@ -12,6 +13,7 @@ import java.util.List;
 public class Model {
     public final static Model instance = new Model();
     private ModelFirebase modelFirebase = new ModelFirebase();
+    private ModelSql modelSql = new ModelSql();
     private LiveData<List<User>> usersList;
 
 
@@ -30,15 +32,25 @@ public class Model {
         modelFirebase.addUser(user, listener);
     }
 
-    public LiveData<List<User>> getAllUsers() {
+    public LiveData<List<User>> getAllUsers(AsyncListener listener) {
         if (usersList == null) {
             usersList = AppLocalDB.db.userDao().getAllUsers();
+            refreshAllUsers(listener);
         }
         else {
-            refreshAllUsers(null);
+            listener.onComplete(null);
         }
 
         return usersList;
+    }
+
+    public String getCurrentUserID() {
+        return ModelFirebase.getCurrentUserID();
+    }
+
+    public void getUserById(String id, AsyncListener<User> listener) {
+        refreshAllUsers(null);
+        modelSql.getUserById(id, listener);
     }
 
     public void refreshAllUsers(AsyncListener listener) {
@@ -48,23 +60,27 @@ public class Model {
         modelFirebase.getAllUsers(lastUpdated, new AsyncListener<List<User>>() {
             @Override
             public void onComplete(List<User> data) {
+                final long[] lastUpdated = {0};
+
                 for (User user : data) {
-                    long lastUpdated = 0;
-                    AppLocalDB.db.userDao().insertAll(user);
+                    modelSql.insertUser(user, new AsyncListener() {
+                        @Override
+                        public void onComplete(Object data) {
+                            if(user.getLastUpdated() > lastUpdated[0]) {
+                                lastUpdated[0] = user.getLastUpdated();
+                            }
+                        }
+                    });
+                }
 
-                    if(user.getLastUpdated() > lastUpdated) {
-                        lastUpdated = user.getLastUpdated();
-                    }
+                ReadditApplication.context
+                        .getSharedPreferences("TAG", Context.MODE_PRIVATE)
+                        .edit()
+                        .putLong("lastUpdated", lastUpdated[0])
+                        .apply();
 
-                    ReadditApplication.context
-                            .getSharedPreferences("TAG", Context.MODE_PRIVATE)
-                            .edit()
-                            .putLong("lastUpdated", lastUpdated)
-                            .apply();
-
-                    if (listener != null) {
-                        listener.onComplete(null);
-                    }
+                if (listener != null) {
+                    listener.onComplete(null);
                 }
             }
         });

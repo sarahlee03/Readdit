@@ -218,8 +218,6 @@ public class SignUpActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             saveUser();
-                            pbLoading.setVisibility(View.INVISIBLE);
-                            finish();
                         }
                     }
                 })
@@ -259,7 +257,8 @@ public class SignUpActivity extends AppCompatActivity {
                                 data);
                         Model.instance.addUser(user,
                                 data1 -> {
-                                    Model.instance.getAllUsers();
+                                    pbLoading.setVisibility(View.INVISIBLE);
+                                    finish();
                                 });
                     }
                 }

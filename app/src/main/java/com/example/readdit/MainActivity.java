@@ -5,11 +5,18 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Menu;
+import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.TextView;
 
+import com.example.readdit.model.Model;
+import com.example.readdit.model.ModelFirebase;
+import com.example.readdit.model.User;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
+import com.squareup.picasso.Picasso;
 
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -29,7 +36,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        FloatingActionButton fab = findViewById(R.id.fab);
+        FloatingActionButton fab = findViewById(R.id.main_add_review_btn);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -42,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         mAppBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.nav_home, R.id.nav_gallery, R.id.nav_slideshow)
+                R.id.nav_home, R.id.nav_my_reviews, R.id.nav_profile)
                 .setDrawerLayout(drawer)
                 .build();
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
@@ -60,12 +67,32 @@ public class MainActivity extends AppCompatActivity {
                 return false;
             }
         });
+
+        // Get all users to ROOM
+        Model.instance.getAllUsers(new Model.AsyncListener() {
+            @Override
+            public void onComplete(Object data) {
+                // Update drawer with user details
+                Model.instance.getUserById(Model.instance.getCurrentUserID(), new Model.AsyncListener<User>() {
+                    @Override
+                    public void onComplete(User currentUser) {
+                        View headerView = navigationView.getHeaderView(0);
+                        TextView txtName = headerView.findViewById(R.id.drawer_name_txt);
+                        TextView txtEmail = headerView.findViewById(R.id.drawer_email_txt);
+                        ImageView imgProfile = headerView.findViewById(R.id.drawer_profile_img);
+                        txtName.setText(currentUser.getFullName());
+                        txtEmail.setText(currentUser.getEmail());
+                        Picasso.get().load(currentUser.getImageUri()).placeholder(R.drawable.profile_placeholder).into(imgProfile);
+                    }
+                });
+            }
+        });
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
+        //getMenuInflater().inflate(R.menu.main, menu);
         return true;
     }
 

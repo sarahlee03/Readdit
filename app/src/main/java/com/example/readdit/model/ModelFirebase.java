@@ -10,6 +10,7 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.Timestamp;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -23,6 +24,11 @@ import java.util.List;
 
 public class ModelFirebase {
     final String USERS_COLLECTION = "users";
+    public static FirebaseAuth mAuth;
+
+    public ModelFirebase() {
+        mAuth = FirebaseAuth.getInstance();
+    }
 
     // region Image functions
     public void uploadImage(Bitmap imageBmp, String name, Model.AsyncListener<String> listener) {
@@ -88,6 +94,14 @@ public class ModelFirebase {
                         listener.onComplete(data);
                     }
                 });
+    }
+
+    public static String getCurrentUserID() {
+        if (mAuth.getCurrentUser() != null){
+            return mAuth.getCurrentUser().getUid();
+        }
+
+        return null;
     }
     // endregion
 }
