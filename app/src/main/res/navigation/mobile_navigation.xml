@@ -10,16 +10,15 @@
         android:name="com.example.readdit.ui.home.HomeFragment"
         android:label="@string/menu_home"
         tools:layout="@layout/fragment_home" />
-
     <fragment
-        android:id="@+id/nav_gallery"
-        android:name="com.example.readdit.ui.gallery.GalleryFragment"
-        android:label="@string/menu_gallery"
-        tools:layout="@layout/fragment_gallery" />
-
+        android:id="@+id/nav_my_reviews"
+        android:name="com.example.readdit.ui.myreviews.MyReviewsFragment"
+        android:label="@string/menu_myreviews"
+        tools:layout="@layout/my_reviews_fragment" />
     <fragment
-        android:id="@+id/nav_slideshow"
-        android:name="com.example.readdit.ui.slideshow.SlideshowFragment"
-        android:label="@string/menu_slideshow"
-        tools:layout="@layout/fragment_slideshow" />
+        android:id="@+id/nav_profile"
+        android:name="com.example.readdit.ui.profile.ProfileFragment"
+        android:label="@string/menu_profile"
+        tools:layout="@layout/profile_fragment" />
+
 </navigation>
