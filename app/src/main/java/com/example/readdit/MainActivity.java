@@ -5,11 +5,18 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Menu;
+import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.TextView;
 
+import com.example.readdit.model.Model;
+import com.example.readdit.model.ModelFirebase;
+import com.example.readdit.model.User;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
+import com.squareup.picasso.Picasso;
 
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -58,6 +65,26 @@ public class MainActivity extends AppCompatActivity {
                 finish();  //Kill the activity from which you will go to next activity
                 startActivity(intent);
                 return false;
+            }
+        });
+
+        // Get all users to ROOM
+        Model.instance.getAllUsers(new Model.AsyncListener() {
+            @Override
+            public void onComplete(Object data) {
+                // Update drawer with user details
+                Model.instance.getUserById(Model.instance.getCurrentUserID(), new Model.AsyncListener<User>() {
+                    @Override
+                    public void onComplete(User currentUser) {
+                        View headerView = navigationView.getHeaderView(0);
+                        TextView txtName = headerView.findViewById(R.id.drawer_name_txt);
+                        TextView txtEmail = headerView.findViewById(R.id.drawer_email_txt);
+                        ImageView imgProfile = headerView.findViewById(R.id.drawer_profile_img);
+                        txtName.setText(currentUser.getFullName());
+                        txtEmail.setText(currentUser.getEmail());
+                        Picasso.get().load(currentUser.getImageUri()).placeholder(R.drawable.profile_placeholder).into(imgProfile);
+                    }
+                });
             }
         });
     }
