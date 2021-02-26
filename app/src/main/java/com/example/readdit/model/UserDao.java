@@ -21,5 +21,5 @@ public interface UserDao {
     void delete(User user);
 
     @Query("select * from User where userID = :userID")
-    User getUserByUID(String userID);
+    LiveData<User> getUserByUID(String userID);
 }

@@ -1,5 +1,6 @@
 package com.example.readdit.ui.profile;
 
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.app.AlertDialog;
@@ -15,9 +16,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.example.readdit.R;
+import com.example.readdit.ReadditApplication;
+import com.example.readdit.model.User;
 import com.google.android.material.navigation.NavigationView;
+import com.squareup.picasso.Picasso;
 
 public class ProfileFragment extends Fragment {
 
@@ -31,6 +37,19 @@ public class ProfileFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.profile_fragment, container, false);
+        TextView txtName = view.findViewById(R.id.profile_name_txt);
+        TextView txtEmail = view.findViewById(R.id.profile_email_txt);
+        ImageView imgProfile = view.findViewById(R.id.profile_profile_img);
+
+        // Update user details
+        ReadditApplication.currUser.observe(getActivity(), new Observer<User>() {
+            @Override
+            public void onChanged(User user) {
+                txtName.setText(user.getFullName());
+                txtEmail.setText(user.getEmail());
+                Picasso.get().load(user.getImageUri()).placeholder(R.drawable.profile_placeholder).into(imgProfile);
+            }
+        });
 
         // Navigate to change password
         Button btnChangePass = view.findViewById(R.id.profile_change_pass_btn);

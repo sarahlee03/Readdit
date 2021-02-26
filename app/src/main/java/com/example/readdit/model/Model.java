@@ -48,9 +48,9 @@ public class Model {
         return ModelFirebase.getCurrentUserID();
     }
 
-    public void getUserById(String id, AsyncListener<User> listener) {
+    public LiveData<User> getUserById(String id) {
         refreshAllUsers(null);
-        modelSql.getUserById(id, listener);
+        return modelSql.getUserById(id);
     }
 
     public void refreshAllUsers(AsyncListener listener) {
