@@ -62,8 +62,6 @@ public class EditInfoFragment extends Fragment {
         pbLoading = view.findViewById(R.id.editinfo_loading);
         FloatingActionButton btnEditImg = view.findViewById(R.id.editinfo_edit_img_btn);
 
-        pbLoading.setVisibility(View.INVISIBLE);
-
         // Update user details
         ReadditApplication.currUser.observe(getActivity(), new Observer<User>() {
             @Override
