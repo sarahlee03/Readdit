@@ -2,7 +2,6 @@ package com.example.readdit.model;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.os.AsyncTask;
 
 import androidx.lifecycle.LiveData;
 
@@ -48,9 +47,9 @@ public class Model {
         return ModelFirebase.getCurrentUserID();
     }
 
-    public void getUserById(String id, AsyncListener<User> listener) {
+    public LiveData<User> getUserById(String id) {
         refreshAllUsers(null);
-        modelSql.getUserById(id, listener);
+        return modelSql.getUserById(id);
     }
 
     public void refreshAllUsers(AsyncListener listener) {
@@ -63,14 +62,19 @@ public class Model {
                 final long[] lastUpdated = {0};
 
                 for (User user : data) {
-                    modelSql.insertUser(user, new AsyncListener() {
-                        @Override
-                        public void onComplete(Object data) {
-                            if(user.getLastUpdated() > lastUpdated[0]) {
-                                lastUpdated[0] = user.getLastUpdated();
+                    if (user.isDeleted()) {
+                        modelSql.deleteUser(user, null);
+                    }
+                    else {
+                        modelSql.insertUser(user, new AsyncListener() {
+                            @Override
+                            public void onComplete(Object data) {
+                                if(user.getLastUpdated() > lastUpdated[0]) {
+                                    lastUpdated[0] = user.getLastUpdated();
+                                }
                             }
-                        }
-                    });
+                        });
+                    }
                 }
 
                 ReadditApplication.context
@@ -84,6 +88,25 @@ public class Model {
                 }
             }
         });
+    }
+
+    public void deleteUser(User user, AsyncListener<Boolean> listener) {
+        user.setDeleted(true);
+        this.addUser(user, new AsyncListener<Boolean>() {
+            @Override
+            public void onComplete(Boolean data) {
+                if (data) {
+                    modelFirebase.deleteImage(user.getUserID(), new AsyncListener<Boolean>() {
+                        @Override
+                        public void onComplete(Boolean data) {
+                            modelSql.deleteUser(user, listener);
+                        }
+                    });
+                }
+            }
+        });
+
+        refreshAllUsers(null);
     }
     // endregion
 }

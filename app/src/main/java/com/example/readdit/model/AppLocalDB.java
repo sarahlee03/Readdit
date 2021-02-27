@@ -7,7 +7,7 @@ import androidx.room.RoomDatabase;
 import com.example.readdit.ReadditApplication;
 
 // If entity is modified, change the version to higher number
-@Database(entities = {User.class}, version = 3)
+@Database(entities = {User.class}, version = 4)
 abstract class AppLocalDBRepository extends RoomDatabase {
     public abstract UserDao userDao();
 }

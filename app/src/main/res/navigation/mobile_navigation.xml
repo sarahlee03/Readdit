@@ -19,6 +19,33 @@
         android:id="@+id/nav_profile"
         android:name="com.example.readdit.ui.profile.ProfileFragment"
         android:label="@string/menu_profile"
-        tools:layout="@layout/profile_fragment" />
+        tools:layout="@layout/profile_fragment" >
+        <action
+            android:id="@+id/action_nav_profile_to_changePasswordFragment"
+            app:destination="@id/changePasswordFragment" />
+        <action
+            android:id="@+id/action_nav_profile_to_editInfoFragment"
+            app:destination="@id/editInfoFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/changePasswordFragment"
+        android:name="com.example.readdit.ui.profile.ChangePasswordFragment"
+        android:label="fragment_change_password"
+        tools:layout="@layout/fragment_change_password" >
+        <action
+            android:id="@+id/action_changePasswordFragment_pop_including_nav_profile"
+            app:popUpTo="@id/nav_profile"
+            app:popUpToInclusive="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/editInfoFragment"
+        android:name="com.example.readdit.ui.profile.EditInfoFragment"
+        android:label="fragment_edit_info"
+        tools:layout="@layout/fragment_edit_info" >
+        <action
+            android:id="@+id/action_editInfoFragment_pop_including_nav_profile"
+            app:popUpTo="@id/nav_profile"
+            app:popUpToInclusive="true" />
+    </fragment>
 
 </navigation>

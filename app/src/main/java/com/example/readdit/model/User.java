@@ -22,13 +22,15 @@ public class User {
     @NonNull
     private String imageUri;
     private Long lastUpdated;
+    private boolean isDeleted;
 
     // region Constructors
-    public User(@NonNull String userID, @NonNull String fullName, @NonNull String email, @NonNull String imageUri) {
+    public User(@NonNull String userID, @NonNull String fullName, @NonNull String email, @NonNull String imageUri, boolean isDeleted) {
         this.userID = userID;
         this.fullName = fullName;
         this.email = email;
         this.imageUri = imageUri;
+        this.isDeleted = isDeleted;
     }
 
     User(){}
@@ -58,6 +60,10 @@ public class User {
     public Long getLastUpdated() {
         return lastUpdated;
     }
+
+    public boolean isDeleted() {
+        return isDeleted;
+    }
     // endregion
 
     // region Setters
@@ -80,6 +86,11 @@ public class User {
     public void setLastUpdated(Long lastUpdated) {
         this.lastUpdated = lastUpdated;
     }
+
+    public void setDeleted(boolean deleted) {
+        isDeleted = deleted;
+    }
+
     // endregion
 
     // region Functions
@@ -90,6 +101,7 @@ public class User {
         result.put("email", email);
         result.put("imageUri", imageUri);
         result.put("lastUpdated", FieldValue.serverTimestamp());
+        result.put("isDeleted", isDeleted);
         return result;
     }
 
@@ -99,6 +111,7 @@ public class User {
         email = (String)map.get("email");
         imageUri = (String)map.get("imageUri");
         lastUpdated = ((Timestamp)map.get("lastUpdated")).getSeconds();
+        isDeleted = ((boolean)map.get("isDeleted"));
         return this;
     }
     // endregion

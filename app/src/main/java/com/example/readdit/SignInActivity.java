@@ -54,6 +54,7 @@ public class SignInActivity extends AppCompatActivity {
         btnSignIn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                //TODO: Check if form is empty
                 signIn();
             }
         });

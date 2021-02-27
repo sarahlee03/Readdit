@@ -1,6 +1,7 @@
 package com.example.readdit;
 
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -8,6 +9,7 @@ import android.view.Menu;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.readdit.model.Model;
 import com.example.readdit.model.ModelFirebase;
@@ -18,6 +20,9 @@ import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.squareup.picasso.Picasso;
 
+import androidx.annotation.NonNull;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.Observer;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -72,17 +77,22 @@ public class MainActivity extends AppCompatActivity {
         Model.instance.getAllUsers(new Model.AsyncListener() {
             @Override
             public void onComplete(Object data) {
+                // Update current user in app
+                ReadditApplication.setCurrentUser(Model.instance.getUserById(Model.instance.getCurrentUserID()));
+
                 // Update drawer with user details
-                Model.instance.getUserById(Model.instance.getCurrentUserID(), new Model.AsyncListener<User>() {
+                View headerView = navigationView.getHeaderView(0);
+                TextView txtName = headerView.findViewById(R.id.drawer_name_txt);
+                TextView txtEmail = headerView.findViewById(R.id.drawer_email_txt);
+                ImageView imgProfile = headerView.findViewById(R.id.drawer_profile_img);
+                ReadditApplication.currUser.observe(MainActivity.this, new Observer<User>() {
                     @Override
-                    public void onComplete(User currentUser) {
-                        View headerView = navigationView.getHeaderView(0);
-                        TextView txtName = headerView.findViewById(R.id.drawer_name_txt);
-                        TextView txtEmail = headerView.findViewById(R.id.drawer_email_txt);
-                        ImageView imgProfile = headerView.findViewById(R.id.drawer_profile_img);
-                        txtName.setText(currentUser.getFullName());
-                        txtEmail.setText(currentUser.getEmail());
-                        Picasso.get().load(currentUser.getImageUri()).placeholder(R.drawable.profile_placeholder).into(imgProfile);
+                    public void onChanged(User user) {
+                        if (user != null) {
+                            txtName.setText(user.getFullName());
+                            txtEmail.setText(user.getEmail());
+                            Picasso.get().load(user.getImageUri()).placeholder(R.drawable.profile_placeholder).into(imgProfile);
+                        }
                     }
                 });
             }
@@ -101,5 +111,27 @@ public class MainActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         return NavigationUI.navigateUp(navController, mAppBarConfiguration)
                 || super.onSupportNavigateUp();
+    }
+
+    // In case of permission request on EditInfoFragment
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == 1) {
+            // If request is cancelled, the result arrays are empty.
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // Permission granted
+                final int CHOOSE_GALLERY_CODE = 1;
+                Intent pickPhoto = new Intent(Intent.ACTION_PICK);
+                pickPhoto.setType("image/*");
+                startActivityForResult(pickPhoto, CHOOSE_GALLERY_CODE);
+            }
+            else {
+                // Permission denied
+                Toast.makeText(MainActivity.this,
+                        "Permission denied to upload image from external storage",
+                        Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 }
