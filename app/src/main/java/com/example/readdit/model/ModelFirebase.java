@@ -24,6 +24,7 @@ import java.util.List;
 
 public class ModelFirebase {
     final String USERS_COLLECTION = "users";
+    final String PROFILES_FOLDER = "profiles";
     public static FirebaseAuth mAuth;
 
     public ModelFirebase() {
@@ -33,7 +34,7 @@ public class ModelFirebase {
     // region Image functions
     public void uploadImage(Bitmap imageBmp, String name, Model.AsyncListener<String> listener) {
         FirebaseStorage storage = FirebaseStorage.getInstance();
-        final StorageReference imagesRef = storage.getReference().child("profiles").child(name);
+        final StorageReference imagesRef = storage.getReference().child(PROFILES_FOLDER).child(name);
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         imageBmp.compress(Bitmap.CompressFormat.JPEG, 100, baos);
         byte[] data = baos.toByteArray();
@@ -53,6 +54,22 @@ public class ModelFirebase {
                         listener.onComplete(downloadUrl.toString());
                     }
                 });
+            }
+        });
+    }
+
+    public void deleteImage(String name, Model.AsyncListener<Boolean> listener) {
+        FirebaseStorage storage = FirebaseStorage.getInstance();
+        final StorageReference imagesRef = storage.getReference().child(PROFILES_FOLDER).child(name);
+        imagesRef.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                listener.onComplete(true);
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                listener.onComplete(false);
             }
         });
     }

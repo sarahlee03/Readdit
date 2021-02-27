@@ -88,9 +88,11 @@ public class MainActivity extends AppCompatActivity {
                 ReadditApplication.currUser.observe(MainActivity.this, new Observer<User>() {
                     @Override
                     public void onChanged(User user) {
-                        txtName.setText(user.getFullName());
-                        txtEmail.setText(user.getEmail());
-                        Picasso.get().load(user.getImageUri()).placeholder(R.drawable.profile_placeholder).into(imgProfile);
+                        if (user != null) {
+                            txtName.setText(user.getFullName());
+                            txtEmail.setText(user.getEmail());
+                            Picasso.get().load(user.getImageUri()).placeholder(R.drawable.profile_placeholder).into(imgProfile);
+                        }
                     }
                 });
             }

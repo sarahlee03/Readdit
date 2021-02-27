@@ -254,7 +254,8 @@ public class SignUpActivity extends AppCompatActivity {
                         User user = new User(mAuth.getCurrentUser().getUid(),
                                 txtlayoutName.getEditText().getText().toString(),
                                 txtlayoutEmail.getEditText().getText().toString(),
-                                data);
+                                data,
+                                false);
                         Model.instance.addUser(user,
                                 data1 -> {
                                     pbLoading.setVisibility(View.INVISIBLE);

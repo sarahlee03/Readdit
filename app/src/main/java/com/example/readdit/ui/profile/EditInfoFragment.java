@@ -213,7 +213,8 @@ public class EditInfoFragment extends Fragment {
                             User user = new User(Model.instance.getCurrentUserID(),
                                     strName,
                                     txtEmail.getEditText().getText().toString(),
-                                    data);
+                                    data,
+                                    false);
                             Model.instance.addUser(user,
                                     data1 -> {
                                         Toast.makeText(getActivity(),
