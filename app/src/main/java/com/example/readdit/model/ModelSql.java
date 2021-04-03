@@ -20,7 +20,7 @@ public class ModelSql {
             @Override
             protected void onPostExecute(Object o) {
                 super.onPostExecute(o);
-                listener.onComplete(user);
+                if(listener != null) listener.onComplete(user);
 
             }
         }
