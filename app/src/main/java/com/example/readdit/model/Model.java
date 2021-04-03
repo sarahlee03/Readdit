@@ -55,32 +55,29 @@ public class Model {
     public void refreshAllUsers(AsyncListener listener) {
         Long lastUpdated = ReadditApplication.context
                 .getSharedPreferences("TAG", Context.MODE_PRIVATE)
-                .getLong("UsersLastUpdateDate", 0);
+                .getLong("usersLastUpdateDate", 0);
         modelFirebase.getAllUsers(lastUpdated, new AsyncListener<List<User>>() {
             @Override
             public void onComplete(List<User> data) {
-                final long[] lastUpdated = {0};
+                long lastUpdated = 0;
 
                 for (User user : data) {
                     if (user.isDeleted()) {
                         modelSql.deleteUser(user, null);
                     }
                     else {
-                        modelSql.insertUser(user, new AsyncListener() {
-                            @Override
-                            public void onComplete(Object data) {
-                                if(user.getLastUpdated() > lastUpdated[0]) {
-                                    lastUpdated[0] = user.getLastUpdated();
-                                }
-                            }
-                        });
+                        modelSql.insertUser(user, null);
+                    }
+
+                    if(user.getLastUpdated() > lastUpdated) {
+                        lastUpdated = user.getLastUpdated();
                     }
                 }
 
                 ReadditApplication.context
                         .getSharedPreferences("TAG", Context.MODE_PRIVATE)
                         .edit()
-                        .putLong("lastUpdated", lastUpdated[0])
+                        .putLong("usersLastUpdateDate", lastUpdated)
                         .apply();
 
                 if (listener != null) {
