@@ -7,6 +7,7 @@ import androidx.lifecycle.LiveData;
 
 import com.example.readdit.ReadditApplication;
 
+import java.util.LinkedList;
 import java.util.List;
 
 public class Model {
@@ -105,5 +106,16 @@ public class Model {
 
         refreshAllUsers(null);
     }
-    // endregion
+
+    public List<Review> getAllReviews() {
+        List<Review> data = new LinkedList<Review>();
+        for(int i=0;i<10;i++) {
+            Review review = new Review();
+            review.id = "" + i;
+            review.book = "harry potter";
+            review.description = "best book ever";
+            data.add(review);
+        }
+        return data;
+    }
 }
