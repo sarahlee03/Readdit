@@ -47,7 +47,7 @@ public class ReviewsFragment extends Fragment {
             @Override
             public void onItemClick(int position) {
                 Log.d("TAG","row was clicked " + position);
-                String id = "1234567890";
+                String id = data.get(position).id;
                 NavDirections action = ReviewsFragmentDirections.actionReviewsFragmentToReviewFragment(id);
                 Navigation.findNavController(view).navigate(action);
             }
