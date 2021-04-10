@@ -6,13 +6,11 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Menu;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.readdit.model.Model;
-import com.example.readdit.model.ModelFirebase;
 import com.example.readdit.model.User;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
@@ -21,7 +19,6 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.squareup.picasso.Picasso;
 
 import androidx.annotation.NonNull;
-import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Observer;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -54,7 +51,7 @@ public class MainActivity extends AppCompatActivity {
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         mAppBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.nav_home, R.id.nav_my_reviews, R.id.nav_profile)
+                R.id.reviewsFragment, R.id.nav_my_reviews, R.id.nav_profile)
                 .setDrawerLayout(drawer)
                 .build();
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
@@ -84,7 +81,7 @@ public class MainActivity extends AppCompatActivity {
                 View headerView = navigationView.getHeaderView(0);
                 TextView txtName = headerView.findViewById(R.id.drawer_name_txt);
                 TextView txtEmail = headerView.findViewById(R.id.drawer_email_txt);
-                ImageView imgProfile = headerView.findViewById(R.id.drawer_profile_img);
+                ImageView imgProfile = headerView.findViewById(R.id.review_drawer_profile_img);
                 ReadditApplication.currUser.observe(MainActivity.this, new Observer<User>() {
                     @Override
                     public void onChanged(User user) {

@@ -3,13 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@+id/nav_home">
+    app:startDestination="@id/reviewsFragment">
 
-    <fragment
-        android:id="@+id/nav_home"
-        android:name="com.example.readdit.ui.home.HomeFragment"
-        android:label="@string/menu_home"
-        tools:layout="@layout/fragment_home" />
     <fragment
         android:id="@+id/nav_my_reviews"
         android:name="com.example.readdit.ui.myreviews.MyReviewsFragment"
@@ -46,6 +41,25 @@
             android:id="@+id/action_editInfoFragment_pop_including_nav_profile"
             app:popUpTo="@id/nav_profile"
             app:popUpToInclusive="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/reviewsFragment"
+        android:name="com.example.readdit.ui.reviews.ReviewsFragment"
+        android:label="Reviews"
+        tools:layout="@layout/fragment_reviews" >
+        <action
+            android:id="@+id/action_reviewsFragment_to_reviewFragment"
+            app:destination="@id/reviewFragment"
+            app:popUpTo="@id/reviewsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/reviewFragment"
+        android:name="com.example.readdit.ui.reviews.ReviewFragment"
+        android:label="Review"
+        tools:layout="@layout/fragment_review">
+        <argument
+            android:name="reviewId"
+            app:argType="string" />
     </fragment>
 
 </navigation>

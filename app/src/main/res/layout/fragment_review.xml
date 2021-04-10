@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/constraintLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/review_drawer_profile_img"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:shapeAppearance="@style/ShapeAppearance.App.CircleImageView"
+        app:srcCompat="@drawable/profile_placeholder" />
+
+    <TextView
+        android:id="@+id/review_namet_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:text="Name:"
+        android:textColor="#000000"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/review_ratingbar" />
+
+    <TextView
+        android:id="@+id/review_row_summaryt_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:text="Summary:"
+        android:textColor="#000000"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/review_categoryt_tv" />
+
+    <TextView
+        android:id="@+id/review_reviewt_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:text="Review:"
+        android:textColor="#000000"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/review_row_summaryt_tv" />
+
+    <TextView
+        android:id="@+id/review_username_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:height="60dp"
+        android:gravity="center"
+        android:text="username_placeholder"
+        android:textColor="#000000"
+        android:textStyle="bold"
+        app:layout_constraintStart_toEndOf="@+id/review_drawer_profile_img"
+        app:layout_constraintTop_toTopOf="@+id/review_drawer_profile_img" />
+
+    <TextView
+        android:id="@+id/review_authort_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:text="Author:"
+        android:textColor="#000000"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/review_namet_tv" />
+
+    <TextView
+        android:id="@+id/review_categoryt_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:text="Category:"
+        android:textColor="#000000"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/review_authort_tv" />
+
+    <TextView
+        android:id="@+id/review_datet_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:text="Posted On:"
+        android:textColor="#000000"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/review_date_tv"
+        app:layout_constraintTop_toTopOf="@+id/review_ratingbar" />
+
+    <TextView
+        android:id="@+id/review_name_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:text="name_placeholder"
+        app:layout_constraintStart_toEndOf="@+id/review_namet_tv"
+        app:layout_constraintTop_toTopOf="@+id/review_namet_tv" />
+
+    <TextView
+        android:id="@+id/review_author_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:text="author_placeholder"
+        app:layout_constraintStart_toEndOf="@+id/review_authort_tv"
+        app:layout_constraintTop_toBottomOf="@+id/review_name_tv" />
+
+    <TextView
+        android:id="@+id/review_category_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:text="category_placeholder"
+        app:layout_constraintStart_toEndOf="@+id/review_categoryt_tv"
+        app:layout_constraintTop_toBottomOf="@+id/review_author_tv" />
+
+    <TextView
+        android:id="@+id/review_summary_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:text="summary_placeholder"
+        app:layout_constraintStart_toEndOf="@+id/review_row_summaryt_tv"
+        app:layout_constraintTop_toBottomOf="@+id/review_category_tv" />
+
+    <TextView
+        android:id="@+id/review_review_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:text="review_placeholder"
+        app:layout_constraintStart_toEndOf="@+id/review_reviewt_tv"
+        app:layout_constraintTop_toBottomOf="@+id/review_summary_tv" />
+
+    <TextView
+        android:id="@+id/review_date_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:text="date_placeholder"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/review_datet_tv" />
+
+    <RatingBar
+        android:id="@+id/review_ratingbar"
+        style="?android:attr/ratingBarStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:indeterminate="false"
+        android:max="5"
+        android:numStars="5"
+        android:rating="1"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/review_bookimage" />
+
+    <ImageView
+        android:id="@+id/review_bookimage"
+        android:layout_width="match_parent"
+        android:layout_height="160dp"
+        android:layout_gravity="center"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/review_drawer_profile_img"
+        app:srcCompat="@drawable/ic_menu_gallery" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
