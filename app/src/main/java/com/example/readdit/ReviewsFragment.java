@@ -3,6 +3,8 @@ package com.example.readdit;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavDirections;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -43,7 +45,9 @@ public class ReviewsFragment extends Fragment {
             @Override
             public void onItemClick(int position) {
                 Log.d("TAG","row was clicked " + position);
-
+                String id = "1234567890";
+                NavDirections action = ReviewsFragmentDirections.actionReviewsFragmentToReviewFragment(id);
+                Navigation.findNavController(view).navigate(action);
             }
         });
 
