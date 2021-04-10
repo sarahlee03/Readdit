@@ -7,6 +7,8 @@ import androidx.lifecycle.LiveData;
 
 import com.example.readdit.ReadditApplication;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -110,10 +112,17 @@ public class Model {
     public List<Review> getAllReviews() {
         List<Review> data = new LinkedList<Review>();
         for(int i=0;i<10;i++) {
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+            String dateString = format.format(new Date());
+
             Review review = new Review();
             review.id = "" + i;
             review.book = "harry potter";
-            review.description = "best book ever";
+            review.author = "JK Rowling";
+            review.category = "fantasy";
+            review.date = dateString;
+            review.username = "shahar freidenberg";
+            review.rating = 3;
             data.add(review);
         }
         return data;

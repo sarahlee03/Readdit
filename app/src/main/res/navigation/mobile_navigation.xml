@@ -44,7 +44,7 @@
     </fragment>
     <fragment
         android:id="@+id/reviewsFragment"
-        android:name="com.example.readdit.ReviewsFragment"
+        android:name="com.example.readdit.ui.reviews.ReviewsFragment"
         android:label="Reviews"
         tools:layout="@layout/fragment_reviews" >
         <action
@@ -54,7 +54,7 @@
     </fragment>
     <fragment
         android:id="@+id/reviewFragment"
-        android:name="com.example.readdit.ReviewFragment"
+        android:name="com.example.readdit.ui.reviews.ReviewFragment"
         android:label="Review"
         tools:layout="@layout/fragment_review">
         <argument

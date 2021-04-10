@@ -3,5 +3,9 @@ package com.example.readdit.model;
 public class Review {
     public String id;
     public String book;
-    public String description;
+    public String author;
+    public String category;
+    public String date;
+    public int rating;
+    public String username;
 }
