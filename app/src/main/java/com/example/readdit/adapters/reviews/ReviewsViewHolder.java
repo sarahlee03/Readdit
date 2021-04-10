@@ -23,12 +23,12 @@ public class ReviewsViewHolder extends RecyclerView.ViewHolder{
 
     public ReviewsViewHolder(@NonNull View itemView) {
         super(itemView);
-        book = itemView.findViewById(R.id.review_row_name_tv);
-        author = itemView.findViewById(R.id.review_row_author_tv);
-        category = itemView.findViewById(R.id.review_row_category_tv);
-        date = itemView.findViewById(R.id.review_row_date_tv);
-        rating = itemView.findViewById(R.id.review_row_ratingbar);
-        username = itemView.findViewById(R.id.review_row_username_tv);
+        book = itemView.findViewById(R.id.review_name_tv);
+        author = itemView.findViewById(R.id.review_author_tv);
+        category = itemView.findViewById(R.id.review_category_tv);
+        date = itemView.findViewById(R.id.review_date_tv);
+        rating = itemView.findViewById(R.id.review_ratingbar);
+        username = itemView.findViewById(R.id.review_username_tv);
 
         itemView.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -8,4 +8,6 @@ public class Review {
     public String date;
     public int rating;
     public String username;
+    public String summary;
+    public String review;
 }
