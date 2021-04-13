@@ -1,6 +1,5 @@
-package com.example.readdit.adapters.reviews;
+package com.example.readdit.ui.reviews;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;

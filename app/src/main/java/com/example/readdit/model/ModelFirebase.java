@@ -24,7 +24,6 @@ import java.util.List;
 
 public class ModelFirebase {
     final String USERS_COLLECTION = "users";
-    final String PROFILES_FOLDER = "profiles";
     public static FirebaseAuth mAuth;
 
     public ModelFirebase() {
@@ -32,9 +31,10 @@ public class ModelFirebase {
     }
 
     // region Image functions
-    public void uploadImage(Bitmap imageBmp, String name, Model.AsyncListener<String> listener) {
+    public void uploadImage(Bitmap imageBmp, String folder, String name, Model.AsyncListener<String> listener) {
+
         FirebaseStorage storage = FirebaseStorage.getInstance();
-        final StorageReference imagesRef = storage.getReference().child(PROFILES_FOLDER).child(name);
+        final StorageReference imagesRef = storage.getReference().child(folder).child(name);
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         imageBmp.compress(Bitmap.CompressFormat.JPEG, 100, baos);
         byte[] data = baos.toByteArray();
@@ -58,9 +58,9 @@ public class ModelFirebase {
         });
     }
 
-    public void deleteImage(String name, Model.AsyncListener<Boolean> listener) {
+    public void deleteImage(String name, Model.AsyncListener<Boolean> listener, String folder) {
         FirebaseStorage storage = FirebaseStorage.getInstance();
-        final StorageReference imagesRef = storage.getReference().child(PROFILES_FOLDER).child(name);
+        final StorageReference imagesRef = storage.getReference().child(folder).child(name);
         imagesRef.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {

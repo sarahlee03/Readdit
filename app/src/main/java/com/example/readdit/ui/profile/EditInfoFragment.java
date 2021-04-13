@@ -42,6 +42,7 @@ import com.squareup.picasso.Picasso;
 public class EditInfoFragment extends Fragment {
     private final int TAKE_PHOTO_CODE = 0;
     private final int CHOOSE_GALLERY_CODE = 1;
+    final String PROFILES_FOLDER = "profiles";
     private String formerName;
     private boolean wasImageSelected = false;
     private View view;
@@ -186,6 +187,7 @@ public class EditInfoFragment extends Fragment {
         builder.show();
     }
 
+
     private boolean isFormValid(){
         txtName.setError("");
         boolean isValid = true;
@@ -206,7 +208,7 @@ public class EditInfoFragment extends Fragment {
             pbLoading.setVisibility(View.VISIBLE);
             if (imgProfile.getDrawable() != null) {
                 Bitmap bitMap = ((BitmapDrawable) imgProfile.getDrawable()).getBitmap();
-                Model.instance.uploadImage(bitMap, Model.instance.getCurrentUserID(), new Model.AsyncListener<String>() {
+                Model.instance.uploadImage(bitMap, PROFILES_FOLDER, Model.instance.getCurrentUserID(), new Model.AsyncListener<String>() {
                     @Override
                     public void onComplete(String data) {
                         if (data != null) {

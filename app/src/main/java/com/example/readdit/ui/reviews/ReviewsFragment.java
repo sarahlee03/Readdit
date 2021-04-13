@@ -12,11 +12,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.RemoteViewsService;
 
 import com.example.readdit.R;
-import com.example.readdit.ui.reviews.ReviewsFragmentDirections;
-import com.example.readdit.adapters.reviews.ReviewsAdapter;
 import com.example.readdit.model.Model;
 import com.example.readdit.model.Review;
 
@@ -53,6 +50,7 @@ public class ReviewsFragment extends Fragment {
             }
         });
 
+        // use picasso
         return view;
     }
 }
