@@ -101,7 +101,7 @@ public class NewReviewActivity extends AppCompatActivity {
 
         final CharSequence[] options = { TAKE_PHOTO, CHOOSE_GALLERY };
         AlertDialog.Builder builder = new AlertDialog.Builder(this)
-                .setTitle("Choose your book picture:")
+                .setTitle("Choose your book picture")
                 .setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {

@@ -25,6 +25,7 @@ public class ReviewFragment extends Fragment {
         View view =  inflater.inflate(R.layout.fragment_review, container, false);
         String reviewId = ReviewFragmentArgs.fromBundle(getArguments()).getReviewId();
         Log.d("TAG","review id is:" + reviewId);
+        // use picasso
         return view;
     }
 }
