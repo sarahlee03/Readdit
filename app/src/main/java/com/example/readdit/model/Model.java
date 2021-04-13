@@ -17,15 +17,15 @@ public class Model {
     private ModelFirebase modelFirebase = new ModelFirebase();
     private ModelSql modelSql = new ModelSql();
     private LiveData<List<User>> usersList;
-
+    final String PROFILES_FOLDER = "profiles";
 
     public interface AsyncListener<T> {
         void onComplete(T data);
     }
 
     // region Image functions
-    public void uploadImage(Bitmap imageBmp, String name, AsyncListener<String> listener) {
-        modelFirebase.uploadImage(imageBmp, name, listener);
+    public void uploadImage(Bitmap imageBmp, String folder, String name, AsyncListener<String> listener) {
+        modelFirebase.uploadImage(imageBmp, folder, name, listener);
     }
     // endregion
 
@@ -101,7 +101,7 @@ public class Model {
                         public void onComplete(Boolean data) {
                             modelSql.deleteUser(user, listener);
                         }
-                    });
+                    }, PROFILES_FOLDER);
                 }
             }
         });
