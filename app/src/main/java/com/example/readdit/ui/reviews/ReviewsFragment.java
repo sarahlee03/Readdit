@@ -3,6 +3,7 @@ package com.example.readdit.ui.reviews;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavDirections;
@@ -53,7 +54,13 @@ public class ReviewsFragment extends Fragment {
             }
         });
 
-        // use picasso
+        viewModel.getAllReviews().observe(getViewLifecycleOwner(), new Observer<List<Review>>() {
+            @Override
+            public void onChanged(List<Review> reviews) {
+                adapter.notifyDataSetChanged();
+            }
+        });
+
         return view;
     }
 }
