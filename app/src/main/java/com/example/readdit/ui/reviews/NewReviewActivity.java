@@ -14,7 +14,10 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RatingBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -41,6 +44,12 @@ public class NewReviewActivity extends AppCompatActivity {
     private Button btnSave;
     private Button btnCancel;
     private ImageView bookImage;
+    private EditText book;
+    private EditText author;
+    private EditText category;
+    private RatingBar rating;
+    private EditText summary;
+    private EditText textReview;
     private FirebaseAuth mAuth;
 
     @Override
@@ -55,13 +64,19 @@ public class NewReviewActivity extends AppCompatActivity {
         btnSave = findViewById(R.id.newreview_save_button);
         btnCancel = findViewById(R.id.newreview_cancel_button);
         bookImage = findViewById(R.id.newreview_book_img);
+        book = findViewById(R.id.newreview_bookname_et);
+        author = findViewById(R.id.newreview_author_et);
+        category = findViewById(R.id.newreview_category_et);
+        rating = findViewById(R.id.newreview_ratingbar);
+        summary = findViewById(R.id.newreview_summary_et);
+        textReview = findViewById(R.id.newreview_review_et);
+
         mAuth = FirebaseAuth.getInstance();
 
         btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 saveReview();
-                finish();
             }
         });
         btnCancel.setOnClickListener(new View.OnClickListener() {
@@ -79,17 +94,28 @@ public class NewReviewActivity extends AppCompatActivity {
     }
 
     private void saveReview() {
-        // save image
         Review review = new Review();
-        review.id = "1";
+        review.setBook(book.getText().toString());
+        review.setAuthor(author.getText().toString());
+        review.setCategory(category.getText().toString());
+        review.setRating(rating.getRating());
+        review.setSummary(summary.getText().toString());
+        review.setReview(textReview.getText().toString());
+        // save image
         if (bookImage.getDrawable() != null) {
             Bitmap bitMap = ((BitmapDrawable) bookImage.getDrawable()).getBitmap();
-            // review.id = the file name
-            Model.instance.uploadImage(bitMap, BOOKS_FOLDER, review.id, new Model.AsyncListener<String>() {
+            Model.instance.uploadImage(bitMap, BOOKS_FOLDER, Model.instance.getCurrentUserID() + "/" + review.getBook(), new Model.AsyncListener<String>() {
                 @Override
                 // after image saved
                 public void onComplete(String data) {
                     // save review with image url - lesson 9 1:15
+                    review.setImage(data);
+                    Model.instance.addReview(review, new Model.AddReviewListener() {
+                        @Override
+                        public void onComplete() {
+                            finish();
+                        }
+                    });
                 }
             });
         }

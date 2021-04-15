@@ -3,6 +3,8 @@ package com.example.readdit.ui.reviews;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModel;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavDirections;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -20,6 +22,7 @@ import com.example.readdit.model.Review;
 import java.util.List;
 
 public class ReviewsFragment extends Fragment {
+    ReviewsViewModel viewModel;
 
     public ReviewsFragment() {
         // Required empty public constructor
@@ -34,17 +37,17 @@ public class ReviewsFragment extends Fragment {
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         rv.setLayoutManager(layoutManager);
 
-        List<Review> data = Model.instance.getAllReviews();
+        viewModel = new ViewModelProvider(this).get(ReviewsViewModel.class);
 
         ReviewsAdapter adapter = new ReviewsAdapter(getLayoutInflater());
-        adapter.data = data;
+        adapter.data = viewModel.getAllReviews().getValue();
         rv.setAdapter(adapter);
 
         adapter.setOnClickListener(new ReviewsAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(int position) {
                 Log.d("TAG","row was clicked " + position);
-                String id = data.get(position).id;
+                String id = viewModel.getAllReviews().getValue().get(position).getId();
                 NavDirections action = ReviewsFragmentDirections.actionReviewsFragmentToReviewFragment(id);
                 Navigation.findNavController(view).navigate(action);
             }
