@@ -159,7 +159,9 @@ public class Model {
         String dateString = format.format(new Date());
         review.setDate(dateString);
         // save username
-        review.setUsername(getCurrentUserID().toString());
+        User currentUser = getUserById(getCurrentUserID()).getValue();
+        review.setUsername(currentUser.getFullName());
+        review.setUserImage(currentUser.getImageUri());
         // add review
         modelFirebase.addReview(review, new AddReviewListener() {
             @Override

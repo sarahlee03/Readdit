@@ -26,6 +26,8 @@ public class Review {
     @NonNull
     private String username;
     @NonNull
+    private String userImage;
+    @NonNull
     private String summary;
     @NonNull
     private String review;
@@ -142,6 +144,7 @@ public class Review {
         result.put("category", category);
         result.put("rating", rating);
         result.put("username", username);
+        result.put("userImage", userImage);
         result.put("date", date);
         result.put("summary", summary);
         result.put("review", review);
@@ -149,6 +152,15 @@ public class Review {
         result.put("lastUpdated", FieldValue.serverTimestamp());
         result.put("isDeleted", isDeleted);
         return result;
+    }
+
+    @NonNull
+    public String getUserImage() {
+        return userImage;
+    }
+
+    public void setUserImage(@NonNull String userImage) {
+        this.userImage = userImage;
     }
 
     public Review fromMap(Map<String, Object> map) {
@@ -162,6 +174,7 @@ public class Review {
         summary = (String)map.get("summary");
         review = (String)map.get("review");
         image = (String)map.get("image");
+        userImage = (String)map.get("userImage");
         lastUpdated = (Long)((Timestamp)map.get("lastUpdated")).getSeconds();
         isDeleted = ((boolean)map.get("isDeleted"));
         return this;
