@@ -12,7 +12,7 @@ public class MyReviewsViewModel extends ViewModel {
     private LiveData<List<Review>> reviewsList;
 
     public MyReviewsViewModel(){
-        reviewsList = Model.instance.getAllReviews();
+        reviewsList = Model.instance.getMyReviews();
     }
 
     public LiveData<List<Review>> getMyReviews(){

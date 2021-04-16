@@ -20,6 +20,7 @@ public class Review {
     private String category;
     private double rating;
     private String username;
+    private String userId;
     private String userImage;
     private String summary;
     private String review;
@@ -132,6 +133,7 @@ public class Review {
         result.put("rating", rating);
         result.put("username", username);
         result.put("userImage", userImage);
+        result.put("userId", userId);
         result.put("date", date);
         result.put("summary", summary);
         result.put("review", review);
@@ -162,8 +164,17 @@ public class Review {
         review = (String)map.get("review");
         image = (String)map.get("image");
         userImage = (String)map.get("userImage");
+        userId = (String)map.get("userId");
         lastUpdated = (Long)((Timestamp)map.get("lastUpdated")).getSeconds();
         isDeleted = ((boolean)map.get("isDeleted"));
         return this;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 }
