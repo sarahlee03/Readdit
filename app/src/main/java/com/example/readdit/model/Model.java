@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.Observer;
 
 import com.example.readdit.ReadditApplication;
 
@@ -18,6 +19,7 @@ public class Model {
     private ModelSql modelSql = new ModelSql();
     private LiveData<List<User>> usersList;
     final String PROFILES_FOLDER = "profiles";
+    private LiveData<List<Review>> reviewsList;
 
     public interface AsyncListener<T> {
         void onComplete(T data);
@@ -109,22 +111,82 @@ public class Model {
         refreshAllUsers(null);
     }
 
-    public List<Review> getAllReviews() {
-        List<Review> data = new LinkedList<Review>();
-        for(int i=0;i<10;i++) {
-            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-            String dateString = format.format(new Date());
-
-            Review review = new Review();
-            review.id = "" + i;
-            review.book = "harry potter";
-            review.author = "JK Rowling";
-            review.category = "fantasy";
-            review.date = dateString;
-            review.username = "shahar freidenberg";
-            review.rating = 3;
-            data.add(review);
+    // reviews
+    public LiveData<List<Review>> getAllReviews() {
+        if (reviewsList == null) {
+            reviewsList = modelSql.getAllReviews();
+            refreshAllReviews(null);
         }
-        return data;
+        return reviewsList;
     }
+
+    public void refreshAllReviews(final GetAllReviewsListener listener) {
+        Long lastUpdated = ReadditApplication.context
+                .getSharedPreferences("TAG", Context.MODE_PRIVATE)
+                .getLong("reviewsLastUpdateDate", 0);
+        modelFirebase.getAllReviews(lastUpdated, new ModelFirebase.GetAllReviewsListener() {
+            @Override
+            public void onComplete(List<Review> data) {
+                long lastUpdated = 0;
+                for (Review review : data) {
+                    if (review.isDeleted()) {
+                        modelSql.deleteReview(review, null);
+                    }
+                    else {
+                        modelSql.addReview(review, null);
+                    }
+
+                    if(review.getLastUpdated() > lastUpdated) {
+                        lastUpdated = review.getLastUpdated();
+                    }
+                }
+
+                ReadditApplication.context
+                        .getSharedPreferences("TAG", Context.MODE_PRIVATE)
+                        .edit()
+                        .putLong("reviewsLastUpdateDate", lastUpdated)
+                        .apply();
+
+                if (listener != null) {
+                    listener.onComplete();
+                }
+            }
+        });
+    }
+
+    public void addReview(final Review review, final AddReviewListener listener) {
+        // save date
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        String dateString = format.format(new Date());
+        review.setDate(dateString);
+        // add review
+        modelFirebase.addReview(review, new AddReviewListener() {
+            @Override
+            public void onComplete() {
+                refreshAllReviews(new GetAllReviewsListener() {
+                    @Override
+                    public void onComplete() {
+                        listener.onComplete();
+                    }
+                });
+            }
+        });
+    }
+
+    public void getReview(String id, GetReviewListener listener) {
+        modelFirebase.getReview(id, listener);
+    }
+
+    public interface AddReviewListener {
+        void onComplete();
+    }
+
+    public interface GetAllReviewsListener{
+        void onComplete();
+    }
+
+    public interface GetReviewListener {
+        void onComplete(Review review);
+    }
+
 }

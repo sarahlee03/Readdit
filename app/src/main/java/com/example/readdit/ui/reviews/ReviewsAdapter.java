@@ -5,6 +5,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.lifecycle.ViewModel;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.readdit.R;
@@ -13,11 +14,12 @@ import com.example.readdit.model.Review;
 import java.util.List;
 
 public class ReviewsAdapter extends RecyclerView.Adapter<ReviewsViewHolder>{
-    public List<Review> data;
     LayoutInflater inflater;
+    ReviewsViewModel viewModel;
 
-    public ReviewsAdapter(LayoutInflater inflater){
+    public ReviewsAdapter(LayoutInflater inflater, ReviewsViewModel viewModel){
         this.inflater = inflater;
+        this.viewModel = viewModel;
     }
     public interface OnItemClickListener{
         void onItemClick(int position);
@@ -40,13 +42,13 @@ public class ReviewsAdapter extends RecyclerView.Adapter<ReviewsViewHolder>{
 
     @Override
     public void onBindViewHolder(@NonNull ReviewsViewHolder holder, int position) {
-        Review review = data.get(position);
+        Review review = viewModel.getAllReviews().getValue().get(position);
 
         holder.bindData(review, position);
     }
 
     @Override
     public int getItemCount() {
-        return data.size();
+        if(viewModel.getAllReviews().getValue() != null) { return viewModel.getAllReviews().getValue().size(); } return 0;
     }
 }

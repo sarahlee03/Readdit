@@ -2,6 +2,7 @@ package com.example.readdit.model;
 
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 
@@ -11,6 +12,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -24,6 +26,7 @@ import java.util.List;
 
 public class ModelFirebase {
     final String USERS_COLLECTION = "users";
+    final String REVIEWS_COLLECTION = "reviews";
     public static FirebaseAuth mAuth;
 
     public ModelFirebase() {
@@ -32,7 +35,6 @@ public class ModelFirebase {
 
     // region Image functions
     public void uploadImage(Bitmap imageBmp, String folder, String name, Model.AsyncListener<String> listener) {
-
         FirebaseStorage storage = FirebaseStorage.getInstance();
         final StorageReference imagesRef = storage.getReference().child(folder).child(name);
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -114,11 +116,77 @@ public class ModelFirebase {
     }
 
     public static String getCurrentUserID() {
-        if (mAuth.getCurrentUser() != null){
+        if (mAuth.getCurrentUser() != null) {
             return mAuth.getCurrentUser().getUid();
         }
 
         return null;
     }
     // endregion
+
+    // reviews
+    public void addReview(Review review, Model.AddReviewListener listener) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection(REVIEWS_COLLECTION)
+                .add(review.toMap())
+                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                    @Override
+                    public void onSuccess(DocumentReference documentReference) {
+                        listener.onComplete();
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                    }
+                });
+
+    }
+
+    public void getAllReviews(Long lastUpdated, GetAllReviewsListener listener) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        Timestamp ts = new Timestamp(lastUpdated, 0);
+        db.collection(REVIEWS_COLLECTION)
+                .whereGreaterThanOrEqualTo("lastUpdated", ts)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        List<Review> data = new ArrayList<Review>();
+                        if (task.isSuccessful()) {
+                            for (DocumentSnapshot document : task.getResult()) {
+                                Review review = new Review();
+                                review.fromMap(document.getData());
+                                review.setId(document.getId());
+                                data.add(review);
+                            }
+                        }
+
+                        listener.onComplete(data);
+                    }
+                });
+    }
+
+    interface GetAllReviewsListener{
+        void onComplete(List<Review> list);
+    }
+
+    public void getReview(String id, final Model.GetReviewListener listener) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection("students").document(id).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                Review review = null;
+                if (task.isSuccessful()){
+                    DocumentSnapshot doc = task.getResult();
+                    if (doc != null) {
+                        review = new Review();
+                        review.fromMap(task.getResult().getData());
+                    }
+                }
+                listener.onComplete(review);
+            }
+        });
+    }
+
 }
