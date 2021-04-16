@@ -10,14 +10,14 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class ReviewsViewModel extends ViewModel {
-    private LiveData<List<Review>> stList;
+    private LiveData<List<Review>> reviewsList;
 
     public ReviewsViewModel(){
-        stList = Model.instance.getAllReviews();
+        reviewsList = Model.instance.getAllReviews();
     }
 
     public LiveData<List<Review>> getAllReviews(){
-        return stList;
+        return reviewsList;
     }
 
 }

@@ -116,8 +116,10 @@ public class NewReviewActivity extends AppCompatActivity {
                     ReadditApplication.currUser.observe(NewReviewActivity.this, new Observer<User>() {
                         @Override
                         public void onChanged(User user) {
-                            review.setUserImage(user.getImageUri());
-                            review.setUsername(user.getFullName());
+                            if(user != null) {
+                                review.setUserImage(user.getImageUri());
+                                review.setUsername(user.getFullName());
+                            }
 
                             Model.instance.addReview(review, new Model.AddReviewListener() {
                                 @Override

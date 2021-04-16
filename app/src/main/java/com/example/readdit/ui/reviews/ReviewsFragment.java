@@ -40,7 +40,7 @@ public class ReviewsFragment extends Fragment {
 
         viewModel = new ViewModelProvider(this).get(ReviewsViewModel.class);
 
-        ReviewsAdapter adapter = new ReviewsAdapter(getLayoutInflater());
+        ReviewsAdapter adapter = new ReviewsAdapter(getLayoutInflater(), viewModel);
         rv.setAdapter(adapter);
 
         adapter.setOnClickListener(new ReviewsAdapter.OnItemClickListener() {
