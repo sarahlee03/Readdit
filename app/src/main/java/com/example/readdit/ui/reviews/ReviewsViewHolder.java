@@ -22,6 +22,7 @@ public class ReviewsViewHolder extends RecyclerView.ViewHolder{
     RatingBar rating;
     TextView username;
     ImageView image;
+    ImageView userImage;
     int position;
 
     public ReviewsViewHolder(@NonNull View itemView) {
@@ -33,6 +34,7 @@ public class ReviewsViewHolder extends RecyclerView.ViewHolder{
         rating = itemView.findViewById(R.id.review_ratingbar);
         username = itemView.findViewById(R.id.review_username_tv);
         image = itemView.findViewById(R.id.review_bookimage);
+        userImage = itemView.findViewById(R.id.review_profile_img);
 
         itemView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -49,9 +51,8 @@ public class ReviewsViewHolder extends RecyclerView.ViewHolder{
         date.setText(review.getDate());
         rating.setRating((float)review.getRating());
         username.setText(review.getUsername());
-        if (review.getImage() != null){
-            Picasso.get().load(review.getImage()).placeholder(R.drawable.book_placeholder).into(image);
-        }
+        if(review.getImage() != null) { Picasso.get().load(review.getImage()).placeholder(R.drawable.book_placeholder).into(image); }
+        if(review.getUserImage() != null) { Picasso.get().load(review.getUserImage()).placeholder(R.drawable.profile_placeholder).into(userImage); }
         this.position = position;
     }
 }

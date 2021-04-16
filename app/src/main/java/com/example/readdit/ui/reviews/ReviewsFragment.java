@@ -41,7 +41,6 @@ public class ReviewsFragment extends Fragment {
         viewModel = new ViewModelProvider(this).get(ReviewsViewModel.class);
 
         ReviewsAdapter adapter = new ReviewsAdapter(getLayoutInflater());
-        adapter.data = viewModel.getAllReviews().getValue();
         rv.setAdapter(adapter);
 
         adapter.setOnClickListener(new ReviewsAdapter.OnItemClickListener() {
@@ -54,7 +53,7 @@ public class ReviewsFragment extends Fragment {
             }
         });
 
-        viewModel.getAllReviews().observe(getViewLifecycleOwner(), new Observer<List<Review>>() {
+        viewModel.getAllReviews().observe(getActivity(), new Observer<List<Review>>() {
             @Override
             public void onChanged(List<Review> reviews) {
                 adapter.notifyDataSetChanged();

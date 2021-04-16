@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.Observer;
 
 import com.example.readdit.ReadditApplication;
 
@@ -158,10 +159,6 @@ public class Model {
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         String dateString = format.format(new Date());
         review.setDate(dateString);
-        // save username
-        User currentUser = getUserById(getCurrentUserID()).getValue();
-        review.setUsername(currentUser.getFullName());
-        review.setUserImage(currentUser.getImageUri());
         // add review
         modelFirebase.addReview(review, new AddReviewListener() {
             @Override

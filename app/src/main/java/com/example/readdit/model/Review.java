@@ -15,32 +15,19 @@ public class Review {
     @PrimaryKey
     @NonNull
     private String id;
-    @NonNull
     private String book;
-    @NonNull
     private String author;
-    @NonNull
     private String category;
-    @NonNull
     private double rating;
-    @NonNull
     private String username;
-    @NonNull
     private String userImage;
-    @NonNull
     private String summary;
-    @NonNull
     private String review;
-    @NonNull
     private String date;
-    @NonNull
     private String image;
-    @NonNull
     private boolean isDeleted;
-    @NonNull
     private Long lastUpdated;
 
-    @NonNull
     public String getImage() {
         return image;
     }

@@ -26,14 +26,17 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.lifecycle.Observer;
 
 import com.example.readdit.R;
+import com.example.readdit.ReadditApplication;
 import com.example.readdit.SignUpActivity;
 import com.example.readdit.model.Model;
 import com.example.readdit.model.Review;
 import com.example.readdit.model.User;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.squareup.picasso.Picasso;
 
 import static com.example.readdit.R.layout.new_review_activity;
 
@@ -110,10 +113,18 @@ public class NewReviewActivity extends AppCompatActivity {
                 public void onComplete(String data) {
                     // save review with image url - lesson 9 1:15
                     review.setImage(data);
-                    Model.instance.addReview(review, new Model.AddReviewListener() {
+                    ReadditApplication.currUser.observe(NewReviewActivity.this, new Observer<User>() {
                         @Override
-                        public void onComplete() {
-                            finish();
+                        public void onChanged(User user) {
+                            review.setUserImage(user.getImageUri());
+                            review.setUsername(user.getFullName());
+
+                            Model.instance.addReview(review, new Model.AddReviewListener() {
+                                @Override
+                                public void onComplete() {
+                                    finish();
+                                }
+                            });
                         }
                     });
                 }

@@ -7,7 +7,7 @@
     android:layout_height="match_parent">
 
     <com.google.android.material.imageview.ShapeableImageView
-        android:id="@+id/review_drawer_profile_img"
+        android:id="@+id/review_profile_img"
         android:layout_width="60dp"
         android:layout_height="60dp"
         android:layout_marginStart="16dp"
@@ -63,8 +63,8 @@
         android:text="username_placeholder"
         android:textColor="#000000"
         android:textStyle="bold"
-        app:layout_constraintStart_toEndOf="@+id/review_drawer_profile_img"
-        app:layout_constraintTop_toTopOf="@+id/review_drawer_profile_img" />
+        app:layout_constraintStart_toEndOf="@+id/review_profile_img"
+        app:layout_constraintTop_toTopOf="@+id/review_profile_img" />
 
     <TextView
         android:id="@+id/review_authort_tv"
@@ -182,7 +182,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/review_drawer_profile_img"
+        app:layout_constraintTop_toBottomOf="@+id/review_profile_img"
         app:srcCompat="@drawable/ic_menu_gallery" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
