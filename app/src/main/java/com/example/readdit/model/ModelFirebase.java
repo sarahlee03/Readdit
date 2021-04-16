@@ -132,6 +132,7 @@ public class ModelFirebase {
                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                     @Override
                     public void onSuccess(DocumentReference documentReference) {
+                        listener.onComplete();
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {

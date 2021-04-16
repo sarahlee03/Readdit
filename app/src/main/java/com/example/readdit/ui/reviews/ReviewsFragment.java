@@ -53,7 +53,7 @@ public class ReviewsFragment extends Fragment {
             }
         });
 
-        viewModel.getAllReviews().observe(getActivity(), new Observer<List<Review>>() {
+        viewModel.getAllReviews().observe(getViewLifecycleOwner(), new Observer<List<Review>>() {
             @Override
             public void onChanged(List<Review> reviews) {
                 adapter.notifyDataSetChanged();
