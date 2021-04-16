@@ -34,7 +34,7 @@ public class ReviewsViewHolder extends RecyclerView.ViewHolder{
         rating = itemView.findViewById(R.id.review_ratingbar);
         username = itemView.findViewById(R.id.review_username_tv);
         image = itemView.findViewById(R.id.review_bookimage);
-        userImage = itemView.findViewById(R.id.review_profile_img);
+        userImage = itemView.findViewById(R.id.drawer_profile_img);
 
         itemView.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -13,7 +13,7 @@
     android:theme="@style/ThemeOverlay.AppCompat.Dark">
 
     <com.google.android.material.imageview.ShapeableImageView
-        android:id="@+id/review_profile_img"
+        android:id="@+id/drawer_profile_img"
         android:layout_width="75dp"
         android:layout_height="75dp"
         android:scaleType="centerCrop"

@@ -83,7 +83,7 @@ public class MainActivity extends AppCompatActivity {
                 View headerView = navigationView.getHeaderView(0);
                 TextView txtName = headerView.findViewById(R.id.drawer_name_txt);
                 TextView txtEmail = headerView.findViewById(R.id.drawer_email_txt);
-                ImageView imgProfile = headerView.findViewById(R.id.review_drawer_profile_img);
+                ImageView imgProfile = headerView.findViewById(R.id.drawer_profile_img);
                 ReadditApplication.currUser.observe(MainActivity.this, new Observer<User>() {
                     @Override
                     public void onChanged(User user) {
