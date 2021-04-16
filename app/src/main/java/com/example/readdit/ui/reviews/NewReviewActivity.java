@@ -12,6 +12,8 @@ import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Patterns;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -38,11 +40,15 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.squareup.picasso.Picasso;
 
+import java.util.regex.Pattern;
+
 import static com.example.readdit.R.layout.new_review_activity;
+import static com.example.readdit.R.layout.review_row;
 
 public class NewReviewActivity extends AppCompatActivity {
     private final int TAKE_PHOTO_CODE = 0;
     private final int CHOOSE_GALLERY_CODE = 1;
+    boolean imageSelected = false;
     private Button btnSave;
     private Button btnCancel;
     private ImageView bookImage;
@@ -95,7 +101,42 @@ public class NewReviewActivity extends AppCompatActivity {
         });
     }
 
+    private boolean isFormValid() {
+        boolean isValid = true;
+
+        if(!imageSelected) {
+            Toast toast = Toast.makeText(NewReviewActivity.this,
+                    "Please upload picture of your book",
+                    Toast.LENGTH_SHORT);
+            toast.show();
+            isValid = false;
+        }
+        if(book.getText().toString().isEmpty()){
+            isValid = false;
+            book.setError("Book name cannot be empty");
+        }
+        if(author.getText().toString().isEmpty()){
+            isValid = false;
+            author.setError("Author name cannot be empty");
+        }
+        if(category.getText().toString().isEmpty()){
+            isValid = false;
+            category.setError("Category cannot be empty");
+        }
+        if(summary.getText().toString().isEmpty()){
+            isValid = false;
+            summary.setError("Summary cannot be empty");
+        }
+        if(textReview.getText().toString().isEmpty()){
+            isValid = false;
+            textReview.setError("Review cannot be empty");
+        }
+
+        return isValid;
+    }
+
     private void saveReview() {
+        if(!isFormValid()) { return; }
         Review review = new Review();
         review.setBook(book.getText().toString());
         review.setAuthor(author.getText().toString());
@@ -183,6 +224,7 @@ public class NewReviewActivity extends AppCompatActivity {
                 case TAKE_PHOTO_CODE:
                     if (resultCode == Activity.RESULT_OK && data != null) {
                         bookImage.setImageBitmap((Bitmap) data.getExtras().get("data"));
+                        imageSelected = true;
                     }
                     break;
                 case CHOOSE_GALLERY_CODE:
@@ -197,6 +239,7 @@ public class NewReviewActivity extends AppCompatActivity {
                                 int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
                                 String picturePath = cursor.getString(columnIndex);
                                 bookImage.setImageBitmap(BitmapFactory.decodeFile(picturePath));
+                                imageSelected = true;
                                 cursor.close();
                             }
                         }
