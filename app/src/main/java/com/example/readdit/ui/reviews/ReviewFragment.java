@@ -26,6 +26,7 @@ public class ReviewFragment extends Fragment {
     RatingBar rating;
     TextView username;
     ImageView image;
+    ImageView userImage;
 
     public ReviewFragment() {
         // Required empty public constructor
@@ -39,6 +40,15 @@ public class ReviewFragment extends Fragment {
         String reviewId = ReviewFragmentArgs.fromBundle(getArguments()).getReviewId();
         Log.d("TAG","review id is:" + reviewId);
 
+        book = view.findViewById(R.id.review_name_tv);
+        author = view.findViewById(R.id.review_author_tv);
+        category = view.findViewById(R.id.review_category_tv);
+        date = view.findViewById(R.id.review_date_tv);
+        rating = view.findViewById(R.id.review_ratingbar);
+        username = view.findViewById(R.id.review_username_tv);
+        image = view.findViewById(R.id.review_bookimage);
+        userImage = view.findViewById(R.id.drawer_profile_img);
+
         Model.instance.getReview(reviewId, new Model.GetReviewListener() {
             @Override
             public void onComplete(Review review) {
@@ -48,9 +58,8 @@ public class ReviewFragment extends Fragment {
                 date.setText(review.getDate());
                 rating.setRating(((float) review.getRating()));
                 username.setText(review.getUsername());
-                if (review.getImage() != null){
-                    Picasso.get().load(review.getImage()).placeholder(R.drawable.book_placeholder).into(image);
-                }
+                if(review.getImage() != null) { Picasso.get().load(review.getImage()).placeholder(R.drawable.book_placeholder).into(image); }
+                if(review.getUserImage() != null) { Picasso.get().load(review.getUserImage()).placeholder(R.drawable.profile_placeholder).into(userImage); }
                 }
         });
 

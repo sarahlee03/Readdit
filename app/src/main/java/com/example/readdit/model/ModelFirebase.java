@@ -173,7 +173,7 @@ public class ModelFirebase {
 
     public void getReview(String id, final Model.GetReviewListener listener) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        db.collection("students").document(id).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+        db.collection(REVIEWS_COLLECTION).document(id).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 Review review = null;
