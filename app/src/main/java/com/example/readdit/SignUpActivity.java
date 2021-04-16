@@ -41,7 +41,6 @@ import java.util.regex.Pattern;
 public class SignUpActivity extends AppCompatActivity {
     final int TAKE_PHOTO_CODE = 0;
     final int CHOOSE_GALLERY_CODE = 1;
-    final String PROFILES_FOLDER = "profiles";
     boolean wasImageSelected = false;
     private FirebaseAuth mAuth;
     private TextInputLayout txtlayoutName;
@@ -248,7 +247,7 @@ public class SignUpActivity extends AppCompatActivity {
     private void saveUser() {
         if (profileImage.getDrawable() != null) {
             Bitmap bitMap = ((BitmapDrawable) profileImage.getDrawable()).getBitmap();
-            Model.instance.uploadImage(bitMap, PROFILES_FOLDER, mAuth.getCurrentUser().getUid(), new Model.AsyncListener<String>() {
+            Model.instance.uploadImage(bitMap, ReadditApplication.PROFILES_FOLDER, mAuth.getCurrentUser().getUid(), new Model.AsyncListener<String>() {
                 @Override
                 public void onComplete(String data) {
                     if (data != null) {

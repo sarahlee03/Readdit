@@ -6,6 +6,7 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 
+import com.example.readdit.ReadditApplication;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -25,8 +26,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ModelFirebase {
-    final String USERS_COLLECTION = "users";
-    final String REVIEWS_COLLECTION = "reviews";
     public static FirebaseAuth mAuth;
 
     public ModelFirebase() {
@@ -80,7 +79,7 @@ public class ModelFirebase {
     // region User functions
     public void addUser(User user, Model.AsyncListener<Boolean> listener) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        db.collection(USERS_COLLECTION)
+        db.collection(ReadditApplication.USERS_COLLECTION)
                 .document(String.valueOf(user.getUserID()))
                 .set(user.toMap())
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
@@ -96,7 +95,7 @@ public class ModelFirebase {
     public void getAllUsers(Long lastUpdated, Model.AsyncListener<List<User>> listener) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         Timestamp ts = new Timestamp(lastUpdated, 0);
-        db.collection(USERS_COLLECTION)
+        db.collection(ReadditApplication.USERS_COLLECTION)
                 .whereGreaterThanOrEqualTo("lastUpdated", ts)
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -127,7 +126,7 @@ public class ModelFirebase {
     // reviews
     public void addReview(Review review, Model.AddReviewListener listener) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        db.collection(REVIEWS_COLLECTION)
+        db.collection(ReadditApplication.REVIEWS_COLLECTION)
                 .add(review.toMap())
                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                     @Override
@@ -146,7 +145,7 @@ public class ModelFirebase {
     public void getAllReviews(Long lastUpdated, GetAllReviewsListener listener) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         Timestamp ts = new Timestamp(lastUpdated, 0);
-        db.collection(REVIEWS_COLLECTION)
+        db.collection(ReadditApplication.REVIEWS_COLLECTION)
                 .whereGreaterThanOrEqualTo("lastUpdated", ts)
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -173,7 +172,7 @@ public class ModelFirebase {
 
     public void getReview(String id, final Model.GetReviewListener listener) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        db.collection(REVIEWS_COLLECTION).document(id).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+        db.collection(ReadditApplication.REVIEWS_COLLECTION).document(id).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 Review review = null;

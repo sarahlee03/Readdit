@@ -43,7 +43,6 @@ import static com.example.readdit.R.layout.new_review_activity;
 public class NewReviewActivity extends AppCompatActivity {
     private final int TAKE_PHOTO_CODE = 0;
     private final int CHOOSE_GALLERY_CODE = 1;
-    final String BOOKS_FOLDER = "books";
     private Button btnSave;
     private Button btnCancel;
     private ImageView bookImage;
@@ -107,7 +106,7 @@ public class NewReviewActivity extends AppCompatActivity {
         // save image
         if (bookImage.getDrawable() != null) {
             Bitmap bitMap = ((BitmapDrawable) bookImage.getDrawable()).getBitmap();
-            Model.instance.uploadImage(bitMap, BOOKS_FOLDER, Model.instance.getCurrentUserID() + "/" + review.getBook(), new Model.AsyncListener<String>() {
+            Model.instance.uploadImage(bitMap, ReadditApplication.BOOKS_FOLDER, Model.instance.getCurrentUserID() + "/" + review.getBook(), new Model.AsyncListener<String>() {
                 @Override
                 // after image saved
                 public void onComplete(String data) {
