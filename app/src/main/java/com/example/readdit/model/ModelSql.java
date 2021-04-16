@@ -13,6 +13,10 @@ public class ModelSql {
         return AppLocalDB.db.reviewDao().getAllReviews();
     }
 
+    public LiveData<List<Review>> getReviewsByUserId(String userId){
+        return AppLocalDB.db.reviewDao().getReviewsByUserId(userId);
+    }
+
     public interface AddReviewListener{
         void onComplete();
     }

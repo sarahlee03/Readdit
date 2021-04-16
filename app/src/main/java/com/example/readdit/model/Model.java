@@ -20,6 +20,7 @@ public class Model {
     private LiveData<List<User>> usersList;
     final String PROFILES_FOLDER = "profiles";
     private LiveData<List<Review>> reviewsList;
+    private LiveData<List<Review>> myReviewsList;
 
     public interface AsyncListener<T> {
         void onComplete(T data);
@@ -118,6 +119,14 @@ public class Model {
             refreshAllReviews(null);
         }
         return reviewsList;
+    }
+
+    public LiveData<List<Review>> getMyReviews() {
+        if (myReviewsList == null) {
+            myReviewsList = modelSql.getReviewsByUserId(getCurrentUserID());
+            refreshAllReviews(null);
+        }
+        return myReviewsList;
     }
 
     public void refreshAllReviews(final GetAllReviewsListener listener) {

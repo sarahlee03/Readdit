@@ -119,6 +119,7 @@ public class NewReviewActivity extends AppCompatActivity {
                             if(user != null) {
                                 review.setUserImage(user.getImageUri());
                                 review.setUsername(user.getFullName());
+                                review.setUserId(user.getUserID());
                             }
 
                             Model.instance.addReview(review, new Model.AddReviewListener() {
