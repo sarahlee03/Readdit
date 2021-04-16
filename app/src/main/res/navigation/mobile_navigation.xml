@@ -9,7 +9,11 @@
         android:id="@+id/nav_my_reviews"
         android:name="com.example.readdit.ui.myreviews.MyReviewsFragment"
         android:label="@string/menu_myreviews"
-        tools:layout="@layout/my_reviews_fragment" />
+        tools:layout="@layout/my_reviews_fragment" >
+        <action
+            android:id="@+id/action_nav_my_reviews_to_reviewFragment"
+            app:destination="@id/reviewFragment" />
+    </fragment>
     <fragment
         android:id="@+id/nav_profile"
         android:name="com.example.readdit.ui.profile.ProfileFragment"
