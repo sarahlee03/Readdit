@@ -15,6 +15,8 @@ import com.example.readdit.model.User;
 import com.google.firebase.auth.FirebaseAuth;
 import com.squareup.picasso.Picasso;
 
+import java.util.List;
+
 import static com.example.readdit.R.layout.new_review_activity;
 
 public class EditReviewActivity extends NewReviewActivity {
@@ -34,21 +36,23 @@ public class EditReviewActivity extends NewReviewActivity {
         busy.setVisibility(View.VISIBLE);
         imageSelected = true;
 
-        Model.instance.getReviewById(reviewId, new Model.GetReviewListener() {
+        Model.instance.getReviewById(reviewId).observe(this, new Observer<Review>() {
             @Override
-            public void onComplete(Review review) {
-                currReview = review;
-                book.setText(review.getBook());
-                book.setEnabled(false);
-                author.setText(review.getAuthor());
-                author.setEnabled(false);
-                category.setText(review.getCategory());
-                rating.setRating(((float) review.getRating()));
-                summary.setText(review.getSummary());
-                textReview.setText(review.getReview());
-                if(review.getImage() != null) { Picasso.get().load(review.getImage()).placeholder(R.drawable.book_placeholder).into(bookImage); }
+            public void onChanged(Review review) {
+                if(review != null) {
+                    currReview = review;
+                    book.setText(review.getBook());
+                    book.setEnabled(false);
+                    author.setText(review.getAuthor());
+                    author.setEnabled(false);
+                    category.setText(review.getCategory());
+                    rating.setRating(((float) review.getRating()));
+                    summary.setText(review.getSummary());
+                    textReview.setText(review.getReview());
+                    if(review.getImage() != null) { Picasso.get().load(review.getImage()).placeholder(R.drawable.book_placeholder).into(bookImage); }
 
-                busy.setVisibility(View.INVISIBLE);
+                    busy.setVisibility(View.INVISIBLE);
+                }
             }
         });
 

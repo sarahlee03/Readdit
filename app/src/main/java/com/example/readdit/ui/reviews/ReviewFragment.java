@@ -71,33 +71,35 @@ public class ReviewFragment extends Fragment {
         edit.setVisibility(View.INVISIBLE);
         delete.setVisibility(View.INVISIBLE);
 
-        Model.instance.getReviewById(reviewId, new Model.GetReviewListener() {
+        Model.instance.getReviewById(reviewId).observe(getViewLifecycleOwner(), new Observer<Review>() {
             @Override
-            public void onComplete(Review review) {
-                book.setText(review.getBook());
-                author.setText(review.getAuthor());
-                category.setText(review.getCategory());
-                date.setText(review.getDate());
-                rating.setRating(((float) review.getRating()));
-                username.setText(review.getUsername());
-                summary.setText(review.getSummary());
-                textReview.setText(review.getReview());
-                if(review.getImage() != null) { Picasso.get().load(review.getImage()).placeholder(R.drawable.book_placeholder).into(image); }
-                if(review.getUserImage() != null) { Picasso.get().load(review.getUserImage()).placeholder(R.drawable.profile_placeholder).into(userImage); }
+            public void onChanged(Review review) {
+                if(review != null) {
+                    book.setText(review.getBook());
+                    author.setText(review.getAuthor());
+                    category.setText(review.getCategory());
+                    date.setText(review.getDate());
+                    rating.setRating(((float) review.getRating()));
+                    username.setText(review.getUsername());
+                    summary.setText(review.getSummary());
+                    textReview.setText(review.getReview());
+                    if(review.getImage() != null) { Picasso.get().load(review.getImage()).placeholder(R.drawable.book_placeholder).into(image); }
+                    if(review.getUserImage() != null) { Picasso.get().load(review.getUserImage()).placeholder(R.drawable.profile_placeholder).into(userImage); }
 
-                // edit and delete icons
-                // get the current user
-                ReadditApplication.currUser.observe(getActivity(), new Observer<User>() {
-                    @Override
-                    public void onChanged(User user) {
-                        if(review.getUserId().equals(user.getUserID())) {
-                            edit.setVisibility(View.VISIBLE);
-                            delete.setVisibility(View.VISIBLE);
+                    // edit and delete icons
+                    // get the current user
+                    ReadditApplication.currUser.observe(getActivity(), new Observer<User>() {
+                        @Override
+                        public void onChanged(User user) {
+                            if(review.getUserId().equals(user.getUserID())) {
+                                edit.setVisibility(View.VISIBLE);
+                                delete.setVisibility(View.VISIBLE);
+                            }
                         }
-                    }
-                });
+                    });
 
-                busy.setVisibility(View.INVISIBLE);
+                    busy.setVisibility(View.INVISIBLE);
+                }
             }
         });
 

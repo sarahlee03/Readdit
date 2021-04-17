@@ -162,13 +162,8 @@ public class Model {
         });
     }
 
-    public void getReviewById(String id, final GetReviewListener listener) {
-        modelSql.getReviewById(id, new GetReviewListener() {
-            @Override
-            public void onComplete(Review review) {
-                listener.onComplete(review);
-            }
-        });
+    public LiveData<Review> getReviewById(String id) {
+        return modelSql.getReviewById(id);
     }
 
     public void addReview(final Review review, final AddReviewListener listener) {
