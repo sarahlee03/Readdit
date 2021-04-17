@@ -18,7 +18,6 @@ public class Model {
     private ModelFirebase modelFirebase = new ModelFirebase();
     private ModelSql modelSql = new ModelSql();
     private LiveData<List<User>> usersList;
-    final String PROFILES_FOLDER = "profiles";
     private LiveData<List<Review>> reviewsList;
     private LiveData<List<Review>> myReviewsList;
 
@@ -104,7 +103,7 @@ public class Model {
                         public void onComplete(Boolean data) {
                             modelSql.deleteUser(user, listener);
                         }
-                    }, PROFILES_FOLDER);
+                    }, ReadditApplication.PROFILES_FOLDER);
                 }
             }
         });
@@ -165,7 +164,7 @@ public class Model {
 
     public void addReview(final Review review, final AddReviewListener listener) {
         // save date
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat format = new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss");
         String dateString = format.format(new Date());
         review.setDate(dateString);
         // add review
