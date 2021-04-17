@@ -190,6 +190,20 @@ public class Model {
         });
     }
 
+    public void editReview(Review review, final AddReviewListener listener) {
+        modelFirebase.editReview(review, new AddReviewListener() {
+            @Override
+            public void onComplete() {
+                refreshAllReviews(new GetAllReviewsListener() {
+                    @Override
+                    public void onComplete() {
+                        listener.onComplete();
+                    }
+                });
+            }
+        });
+    }
+
     public interface AddReviewListener {
         void onComplete();
     }

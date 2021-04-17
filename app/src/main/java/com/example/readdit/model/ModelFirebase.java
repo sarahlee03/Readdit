@@ -25,6 +25,8 @@ import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.example.readdit.ReadditApplication.REVIEWS_COLLECTION;
+
 public class ModelFirebase {
     public static FirebaseAuth mAuth;
 
@@ -126,7 +128,7 @@ public class ModelFirebase {
     // reviews
     public void addReview(Review review, Model.AddReviewListener listener) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        db.collection(ReadditApplication.REVIEWS_COLLECTION)
+        db.collection(REVIEWS_COLLECTION)
                 .add(review.toMap())
                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                     @Override
@@ -142,10 +144,25 @@ public class ModelFirebase {
 
     }
 
+    public void editReview(Review review, Model.AddReviewListener listener) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection(REVIEWS_COLLECTION)
+                .document(String.valueOf(review.getId()))
+                .set(review.toMap())
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (listener != null) {
+                            listener.onComplete();
+                        }
+                    }
+                });
+    }
+
     public void getAllReviews(Long lastUpdated, GetAllReviewsListener listener) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         Timestamp ts = new Timestamp(lastUpdated, 0);
-        db.collection(ReadditApplication.REVIEWS_COLLECTION)
+        db.collection(REVIEWS_COLLECTION)
                 .whereGreaterThanOrEqualTo("lastUpdated", ts)
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -172,7 +189,7 @@ public class ModelFirebase {
 
     public void getReview(String id, final Model.GetReviewListener listener) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        db.collection(ReadditApplication.REVIEWS_COLLECTION).document(id).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+        db.collection(REVIEWS_COLLECTION).document(id).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 Review review = null;

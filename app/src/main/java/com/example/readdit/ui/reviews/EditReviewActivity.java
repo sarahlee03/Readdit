@@ -1,5 +1,7 @@
 package com.example.readdit.ui.reviews;
 
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.view.View;
 
@@ -16,6 +18,8 @@ import com.squareup.picasso.Picasso;
 import static com.example.readdit.R.layout.new_review_activity;
 
 public class EditReviewActivity extends NewReviewActivity {
+    Review currReview;
+
     @Override
     protected void onStart() {
         super.onStart();
@@ -28,12 +32,16 @@ public class EditReviewActivity extends NewReviewActivity {
 
         String reviewId = getIntent().getStringExtra("reviewId");
         busy.setVisibility(View.VISIBLE);
+        imageSelected = true;
 
         Model.instance.getReviewById(reviewId, new Model.GetReviewListener() {
             @Override
             public void onComplete(Review review) {
+                currReview = review;
                 book.setText(review.getBook());
+                book.setEnabled(false);
                 author.setText(review.getAuthor());
+                author.setEnabled(false);
                 category.setText(review.getCategory());
                 rating.setRating(((float) review.getRating()));
                 summary.setText(review.getSummary());
@@ -47,7 +55,7 @@ public class EditReviewActivity extends NewReviewActivity {
         btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //editReview();
+                editReview();
             }
         });
         btnCancel.setOnClickListener(new View.OnClickListener() {
@@ -56,5 +64,31 @@ public class EditReviewActivity extends NewReviewActivity {
                 finish();
             }
         });
+    }
+
+    private void editReview() {
+        if(!isFormValid()) { return; }
+        busy();
+        currReview.setCategory(category.getText().toString());
+        currReview.setRating(rating.getRating());
+        currReview.setSummary(summary.getText().toString());
+        currReview.setReview(textReview.getText().toString());
+        // save image
+        if (bookImage.getDrawable() != null) {
+            Bitmap bitMap = ((BitmapDrawable) bookImage.getDrawable()).getBitmap();
+            Model.instance.uploadImage(bitMap, ReadditApplication.BOOKS_FOLDER, Model.instance.getCurrentUserID() + "/" + currReview.getBook(), new Model.AsyncListener<String>() {
+                @Override
+                // after image saved
+                public void onComplete(String data) {
+                    currReview.setImage(data);
+                    Model.instance.editReview(currReview, new Model.AddReviewListener() {
+                        @Override
+                        public void onComplete() {
+                            finish();
+                        }
+                    });
+                }
+            });
+        }
     }
 }

@@ -50,7 +50,7 @@ import static com.example.readdit.R.layout.review_row;
 public class NewReviewActivity extends AppCompatActivity {
     private final int TAKE_PHOTO_CODE = 0;
     private final int CHOOSE_GALLERY_CODE = 1;
-    boolean imageSelected = false;
+    protected boolean imageSelected = false;
     protected Button btnSave;
     protected Button btnCancel;
     protected ImageView bookImage;
@@ -108,7 +108,7 @@ public class NewReviewActivity extends AppCompatActivity {
         });
     }
 
-    private boolean isFormValid() {
+    protected boolean isFormValid() {
         boolean isValid = true;
 
         if(!imageSelected) {
@@ -142,7 +142,7 @@ public class NewReviewActivity extends AppCompatActivity {
         return isValid;
     }
 
-    private void busy() {
+    protected void busy() {
         busy.setVisibility(View.VISIBLE);
         btnSave.setEnabled(false);
         btnCancel.setEnabled(false);
