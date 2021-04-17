@@ -162,6 +162,15 @@ public class Model {
         });
     }
 
+    public void getReviewById(String id, final GetReviewListener listener) {
+        modelSql.getReviewById(id, new GetReviewListener() {
+            @Override
+            public void onComplete(Review review) {
+                listener.onComplete(review);
+            }
+        });
+    }
+
     public void addReview(final Review review, final AddReviewListener listener) {
         // save date
         SimpleDateFormat format = new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss");
@@ -179,10 +188,6 @@ public class Model {
                 });
             }
         });
-    }
-
-    public void getReview(String id, GetReviewListener listener) {
-        modelFirebase.getReview(id, listener);
     }
 
     public interface AddReviewListener {
