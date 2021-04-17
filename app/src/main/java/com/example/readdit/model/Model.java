@@ -13,6 +13,8 @@ import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
+import static com.example.readdit.ReadditApplication.BOOKS_FOLDER;
+
 public class Model {
     public final static Model instance = new Model();
     private ModelFirebase modelFirebase = new ModelFirebase();
@@ -195,6 +197,29 @@ public class Model {
                         listener.onComplete();
                     }
                 });
+            }
+        });
+    }
+
+    public void deleteReview(Review review, final AddReviewListener listener) {
+        review.setDeleted(true);
+        // update review with isDeleted=false
+        modelFirebase.editReview(review, new AddReviewListener() {
+            @Override
+            public void onComplete() {
+                // delete review image
+                modelFirebase.deleteImage(getCurrentUserID() + "/" + review.getBook(), new AsyncListener<Boolean>() {
+                    @Override
+                    public void onComplete(Boolean data) {
+                        // delete review from sql
+                        refreshAllReviews(new GetAllReviewsListener() {
+                            @Override
+                            public void onComplete() {
+                                listener.onComplete();
+                            }
+                        });
+                    }
+                }, BOOKS_FOLDER);
             }
         });
     }

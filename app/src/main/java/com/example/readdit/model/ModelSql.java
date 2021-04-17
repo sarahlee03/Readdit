@@ -41,7 +41,8 @@ public class ModelSql {
         task.execute();
     }
 
-    public void deleteReview(Review review, Model.AsyncListener<Boolean> listener) {
+
+    public void deleteReview(Review review, Model.AddReviewListener listener) {
         class MyAsyncTask extends AsyncTask {
             @Override
             protected Object doInBackground(Object[] objects) {
@@ -54,11 +55,13 @@ public class ModelSql {
                 super.onPostExecute(o);
 
                 if (listener != null) {
-                    listener.onComplete(true);
+                    listener.onComplete();
                 }
 
             }
         }
+        MyAsyncTask task = new MyAsyncTask();
+        task.execute();
     }
 
     // users

@@ -5,9 +5,16 @@
     android:layout_height="match_parent"
     tools:context=".ui.myreviews.MyReviewsFragment">
 
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/myreviews_swipe">
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/myreviewsfrag_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
+
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
 </FrameLayout>

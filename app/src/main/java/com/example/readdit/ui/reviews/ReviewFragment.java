@@ -5,6 +5,7 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
+import androidx.navigation.Navigation;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -27,6 +28,7 @@ import com.example.readdit.ui.reviews.ReviewFragmentArgs;
 import com.squareup.picasso.Picasso;
 
 public class ReviewFragment extends Fragment {
+    Review currReview;
     TextView book;
     TextView author;
     TextView category;
@@ -75,6 +77,7 @@ public class ReviewFragment extends Fragment {
             @Override
             public void onChanged(Review review) {
                 if(review != null) {
+                    currReview = review;
                     book.setText(review.getBook());
                     author.setText(review.getAuthor());
                     category.setText(review.getCategory());
@@ -110,6 +113,18 @@ public class ReviewFragment extends Fragment {
                 Intent intent = new Intent(getActivity(), EditReviewActivity.class);
                 intent.putExtra("reviewId", reviewId);
                 startActivity(intent);
+            }
+        });
+
+        delete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Model.instance.deleteReview(currReview, new Model.AddReviewListener() {
+                    @Override
+                    public void onComplete() {
+                        Navigation.findNavController(view).popBackStack();
+                    }
+                });
             }
         });
 
