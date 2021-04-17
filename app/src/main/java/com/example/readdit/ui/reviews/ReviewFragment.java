@@ -15,16 +15,15 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RatingBar;
-import android.widget.Spinner;
 import android.widget.TextView;
 
-import com.example.readdit.MainActivity;
 import com.example.readdit.R;
 import com.example.readdit.ReadditApplication;
 import com.example.readdit.model.Model;
 import com.example.readdit.model.Review;
 import com.example.readdit.model.User;
-import com.example.readdit.ui.reviews.ReviewFragmentArgs;
+import com.like.LikeButton;
+import com.like.OnLikeListener;
 import com.squareup.picasso.Picasso;
 
 public class ReviewFragment extends Fragment {
@@ -42,6 +41,8 @@ public class ReviewFragment extends Fragment {
     ProgressBar busy;
     ImageButton delete;
     ImageButton edit;
+    LikeButton like;
+    LikeButton dislike;
 
     public ReviewFragment() {
         // Required empty public constructor
@@ -72,6 +73,8 @@ public class ReviewFragment extends Fragment {
         delete = view.findViewById(R.id.review_delete_icon);
         edit.setVisibility(View.INVISIBLE);
         delete.setVisibility(View.INVISIBLE);
+        like = view.findViewById(R.id.review_like_button);
+        dislike = view.findViewById(R.id.review_dislike_button);
 
         Model.instance.getReviewById(reviewId).observe(getViewLifecycleOwner(), new Observer<Review>() {
             @Override
@@ -125,6 +128,30 @@ public class ReviewFragment extends Fragment {
                         Navigation.findNavController(view).popBackStack();
                     }
                 });
+            }
+        });
+
+        like.setOnLikeListener(new OnLikeListener() {
+            @Override
+            public void liked(LikeButton likeButton) {
+
+            }
+
+            @Override
+            public void unLiked(LikeButton likeButton) {
+
+            }
+        });
+
+        dislike.setOnLikeListener(new OnLikeListener() {
+            @Override
+            public void liked(LikeButton likeButton) {
+
+            }
+
+            @Override
+            public void unLiked(LikeButton likeButton) {
+
             }
         });
 
