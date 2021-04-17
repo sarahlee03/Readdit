@@ -17,8 +17,8 @@ public class ModelSql {
         return AppLocalDB.db.reviewDao().getReviewsByUserId(userId);
     }
 
-    public interface AddReviewListener{
-        void onComplete();
+    public LiveData<Review> getReviewById(String id) {
+        return AppLocalDB.db.reviewDao().getReviewById(id);
     }
 
     public void addReview(final Review review, final Model.AddReviewListener listener){
