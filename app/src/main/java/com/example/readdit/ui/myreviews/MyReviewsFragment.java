@@ -10,6 +10,7 @@ import androidx.navigation.NavDirections;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -25,6 +26,7 @@ import java.util.List;
 
 public class MyReviewsFragment extends Fragment {
     MyReviewsViewModel viewModel;
+    SwipeRefreshLayout refreshLayout;
 
     public MyReviewsFragment() {
         // Required empty public constructor
@@ -34,8 +36,8 @@ public class MyReviewsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_reviews, container, false);
-        RecyclerView rv = view.findViewById(R.id.reviewsfrag_list);
+        View view = inflater.inflate(R.layout.my_reviews_fragment, container, false);
+        RecyclerView rv = view.findViewById(R.id.myreviewsfrag_list);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         rv.setLayoutManager(layoutManager);
 
@@ -61,6 +63,25 @@ public class MyReviewsFragment extends Fragment {
             }
         });
 
+        // handle refresh
+        refreshLayout = view.findViewById(R.id.myreviews_swipe);
+        refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                refreshLayout.setRefreshing(true);
+                reloadData();
+            }
+        });
+
         return view;
+    }
+
+    void reloadData(){
+        Model.instance.refreshAllReviews(new Model.GetAllReviewsListener() {
+            @Override
+            public void onComplete() {
+                refreshLayout.setRefreshing(false);
+            }
+        });
     }
 }
