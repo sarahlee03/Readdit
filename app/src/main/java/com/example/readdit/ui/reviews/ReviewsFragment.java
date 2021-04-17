@@ -2,6 +2,7 @@ package com.example.readdit.ui.reviews;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModel;
@@ -10,6 +11,7 @@ import androidx.navigation.NavDirections;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -24,6 +26,7 @@ import java.util.List;
 
 public class ReviewsFragment extends Fragment {
     ReviewsViewModel viewModel;
+    SwipeRefreshLayout refreshLayout;
 
     public ReviewsFragment() {
         // Required empty public constructor
@@ -53,6 +56,17 @@ public class ReviewsFragment extends Fragment {
             }
         });
 
+        // handle refresh
+        refreshLayout = view.findViewById(R.id.reviews_swipe);
+        refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                refreshLayout.setRefreshing(true);
+                reloadData();
+
+            }
+        });
+
         viewModel.getAllReviews().observe(getViewLifecycleOwner(), new Observer<List<Review>>() {
             @Override
             public void onChanged(List<Review> reviews) {
@@ -61,5 +75,14 @@ public class ReviewsFragment extends Fragment {
         });
 
         return view;
+    }
+
+    void reloadData(){
+        Model.instance.refreshAllReviews(new Model.GetAllReviewsListener() {
+            @Override
+            public void onComplete() {
+                refreshLayout.setRefreshing(false);
+            }
+        });
     }
 }

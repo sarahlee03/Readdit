@@ -11,10 +11,10 @@ import java.util.List;
 
 @Dao
 public interface ReviewDao {
-    @Query("select * from Review")
+    @Query("select * from Review order by date desc")
     LiveData<List<Review>> getAllReviews();
 
-    @Query("select * from Review where userId=:userId")
+    @Query("select * from Review where userId=:userId order by date desc")
     LiveData<List<Review>> getReviewsByUserId(String userId);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)

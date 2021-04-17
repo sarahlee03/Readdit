@@ -164,7 +164,7 @@ public class Model {
 
     public void addReview(final Review review, final AddReviewListener listener) {
         // save date
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat format = new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss");
         String dateString = format.format(new Date());
         review.setDate(dateString);
         // add review

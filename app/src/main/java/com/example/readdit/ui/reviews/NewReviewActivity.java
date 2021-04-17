@@ -18,7 +18,9 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.RatingBar;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -59,6 +61,7 @@ public class NewReviewActivity extends AppCompatActivity {
     private EditText summary;
     private EditText textReview;
     private FirebaseAuth mAuth;
+    private ProgressBar busy;
 
     @Override
     protected void onStart() {
@@ -69,6 +72,8 @@ public class NewReviewActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(new_review_activity);
+        busy = findViewById(R.id.newreview_progress);
+        busy.setVisibility(View.INVISIBLE);
         btnSave = findViewById(R.id.newreview_save_button);
         btnCancel = findViewById(R.id.newreview_cancel_button);
         bookImage = findViewById(R.id.newreview_book_img);
@@ -135,8 +140,24 @@ public class NewReviewActivity extends AppCompatActivity {
         return isValid;
     }
 
+    private void busy() {
+        busy.setVisibility(View.VISIBLE);
+        btnSave.setEnabled(false);
+        btnCancel.setEnabled(false);
+        book.setEnabled(false);
+        author.setEnabled(false);
+        category.setEnabled(false);
+        rating.setEnabled(false);
+        summary.setEnabled(false);
+        textReview.setEnabled(false);
+        bookImage.setEnabled(false);
+    }
+
+
+
     private void saveReview() {
         if(!isFormValid()) { return; }
+        busy();
         Review review = new Review();
         review.setBook(book.getText().toString());
         review.setAuthor(author.getText().toString());

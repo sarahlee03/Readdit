@@ -9,7 +9,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.RatingBar;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.example.readdit.R;
@@ -27,6 +29,7 @@ public class ReviewFragment extends Fragment {
     TextView username;
     ImageView image;
     ImageView userImage;
+    ProgressBar busy;
 
     public ReviewFragment() {
         // Required empty public constructor
@@ -39,6 +42,9 @@ public class ReviewFragment extends Fragment {
         View view =  inflater.inflate(R.layout.fragment_review, container, false);
         String reviewId = ReviewFragmentArgs.fromBundle(getArguments()).getReviewId();
         Log.d("TAG","review id is:" + reviewId);
+
+        busy = view.findViewById(R.id.review_progress);
+        busy.setVisibility(View.VISIBLE);
 
         book = view.findViewById(R.id.review_name_tv);
         author = view.findViewById(R.id.review_author_tv);
@@ -60,7 +66,8 @@ public class ReviewFragment extends Fragment {
                 username.setText(review.getUsername());
                 if(review.getImage() != null) { Picasso.get().load(review.getImage()).placeholder(R.drawable.book_placeholder).into(image); }
                 if(review.getUserImage() != null) { Picasso.get().load(review.getUserImage()).placeholder(R.drawable.profile_placeholder).into(userImage); }
-                }
+                busy.setVisibility(View.INVISIBLE);
+            }
         });
 
         return view;
