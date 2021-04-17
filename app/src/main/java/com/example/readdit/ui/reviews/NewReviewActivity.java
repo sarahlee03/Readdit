@@ -51,17 +51,17 @@ public class NewReviewActivity extends AppCompatActivity {
     private final int TAKE_PHOTO_CODE = 0;
     private final int CHOOSE_GALLERY_CODE = 1;
     boolean imageSelected = false;
-    private Button btnSave;
-    private Button btnCancel;
-    private ImageView bookImage;
-    private EditText book;
-    private EditText author;
-    private EditText category;
-    private RatingBar rating;
-    private EditText summary;
-    private EditText textReview;
-    private FirebaseAuth mAuth;
-    private ProgressBar busy;
+    protected Button btnSave;
+    protected Button btnCancel;
+    protected ImageView bookImage;
+    protected EditText book;
+    protected EditText author;
+    protected EditText category;
+    protected RatingBar rating;
+    protected EditText summary;
+    protected EditText textReview;
+    protected FirebaseAuth mAuth;
+    protected ProgressBar busy;
 
     @Override
     protected void onStart() {
@@ -72,6 +72,8 @@ public class NewReviewActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(new_review_activity);
+        setTitle("New Review");
+
         busy = findViewById(R.id.newreview_progress);
         busy.setVisibility(View.INVISIBLE);
         btnSave = findViewById(R.id.newreview_save_button);

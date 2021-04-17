@@ -1,5 +1,6 @@
 package com.example.readdit.ui.reviews;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -16,6 +17,7 @@ import android.widget.RatingBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.example.readdit.MainActivity;
 import com.example.readdit.R;
 import com.example.readdit.ReadditApplication;
 import com.example.readdit.model.Model;
@@ -31,6 +33,8 @@ public class ReviewFragment extends Fragment {
     TextView date;
     RatingBar rating;
     TextView username;
+    TextView summary;
+    TextView textReview;
     ImageView image;
     ImageView userImage;
     ProgressBar busy;
@@ -60,6 +64,8 @@ public class ReviewFragment extends Fragment {
         username = view.findViewById(R.id.review_username_tv);
         image = view.findViewById(R.id.review_bookimage);
         userImage = view.findViewById(R.id.drawer_profile_img);
+        summary = view.findViewById(R.id.review_summary_tv);
+        textReview = view.findViewById(R.id.review_review_tv);
         edit = view.findViewById(R.id.review_edit_icon);
         delete = view.findViewById(R.id.review_delete_icon);
         edit.setVisibility(View.INVISIBLE);
@@ -74,6 +80,8 @@ public class ReviewFragment extends Fragment {
                 date.setText(review.getDate());
                 rating.setRating(((float) review.getRating()));
                 username.setText(review.getUsername());
+                summary.setText(review.getSummary());
+                textReview.setText(review.getReview());
                 if(review.getImage() != null) { Picasso.get().load(review.getImage()).placeholder(R.drawable.book_placeholder).into(image); }
                 if(review.getUserImage() != null) { Picasso.get().load(review.getUserImage()).placeholder(R.drawable.profile_placeholder).into(userImage); }
 
@@ -90,6 +98,16 @@ public class ReviewFragment extends Fragment {
                 });
 
                 busy.setVisibility(View.INVISIBLE);
+            }
+        });
+
+        edit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // open edit review activity - without killing the main activity
+                Intent intent = new Intent(getActivity(), EditReviewActivity.class);
+                intent.putExtra("reviewId", reviewId);
+                startActivity(intent);
             }
         });
 

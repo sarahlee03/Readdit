@@ -26,6 +26,7 @@
             android:label="@string/app_name"
             android:theme="@style/Theme.Readdit.NoActionBar"></activity>
         <activity android:name=".ui.reviews.NewReviewActivity"></activity>
+        <activity android:name=".ui.reviews.EditReviewActivity"></activity>
     </application>
 
 </manifest>
