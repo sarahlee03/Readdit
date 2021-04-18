@@ -13,6 +13,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.readdit.R;
+import com.example.readdit.model.Model;
 import com.example.readdit.model.Review;
 import com.like.LikeButton;
 import com.squareup.picasso.Picasso;
@@ -90,6 +91,8 @@ public class ReviewsViewHolder extends RecyclerView.ViewHolder{
     }
 
     public void bindData(Review review, int position) {
+        like.setLiked(review.getLikes().contains(Model.instance.getCurrentUserID()));
+        dislike.setLiked(review.getDislikes().contains(Model.instance.getCurrentUserID()));
         book.setText(review.getBook());
         author.setText(review.getAuthor());
         category.setText(review.getCategory());

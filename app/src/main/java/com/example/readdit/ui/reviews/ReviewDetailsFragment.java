@@ -87,6 +87,10 @@ public class ReviewDetailsFragment extends ReviewFragment {
                                 edit.setVisibility(View.VISIBLE);
                                 delete.setVisibility(View.VISIBLE);
                             }
+                            like.setLiked(review.getLikes().contains(user.getUserID()));
+                            like.setEnabled(!review.getDislikes().contains(user.getUserID()));
+                            dislike.setLiked(review.getDislikes().contains(user.getUserID()));
+                            dislike.setEnabled(!review.getLikes().contains(user.getUserID()));
                         }
                     });
 
