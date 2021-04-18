@@ -47,7 +47,6 @@ public class ReviewDetailsFragment extends ReviewFragment {
         busy.setVisibility(View.VISIBLE);
         // for review details
         busy.setVisibility(View.VISIBLE);
-        delete.setVisibility(View.VISIBLE);
         like.setEnabled(true);
         dislike.setEnabled(true);
         summary.setVisibility(View.VISIBLE);
@@ -121,9 +120,11 @@ public class ReviewDetailsFragment extends ReviewFragment {
         like.setOnLikeListener(new OnLikeListener() {
             @Override
             public void liked(LikeButton likeButton) {
-                if(!currReview.getLikes().contains(currUser.getUserID())) {
+                if(!currReview.getLikes().contains(currUser.getUserID()) &&
+                        !currReview.getDislikes().contains(currUser.getUserID())) {
                     currReview.addLike(currUser.getUserID());
                     Model.instance.editReview(currReview, null);
+                    dislike.setEnabled(false);
                 }
             }
 
@@ -133,6 +134,7 @@ public class ReviewDetailsFragment extends ReviewFragment {
                 if(currReview.getLikes().contains(currUser.getUserID())) {
                     currReview.removeLike(currUser.getUserID());
                     Model.instance.editReview(currReview, null);
+                    dislike.setEnabled(true);
                 }
             }
         });
@@ -140,12 +142,22 @@ public class ReviewDetailsFragment extends ReviewFragment {
         dislike.setOnLikeListener(new OnLikeListener() {
             @Override
             public void liked(LikeButton likeButton) {
-
+                if(!currReview.getDislikes().contains(currUser.getUserID())
+                && !currReview.getLikes().contains(currUser.getUserID())) {
+                    currReview.addDislike(currUser.getUserID());
+                    Model.instance.editReview(currReview, null);
+                    like.setEnabled(false);
+                }
             }
 
+            @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void unLiked(LikeButton likeButton) {
-
+                if(currReview.getDislikes().contains(currUser.getUserID())) {
+                    currReview.removeDislike(currUser.getUserID());
+                    Model.instance.editReview(currReview, null);
+                    like.setEnabled(true);
+                }
             }
         });
 

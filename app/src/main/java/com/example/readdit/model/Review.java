@@ -59,6 +59,19 @@ public class Review {
         setLikes(String.join(",", str));
     }
 
+    public void addDislike(String userId) {
+        String str = getDislikes().isEmpty() ? userId : "," + userId;
+        setDislikes(str);
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public void removeDislike(String userId) {
+        ArrayList<String> str = new ArrayList<String>(Arrays.asList(getDislikes().split(",")));
+        str.remove(userId);
+        setDislikes(String.join(",", str));
+    }
+
+
     public void setLikes(String likes) {
         this.likes = likes;
     }
