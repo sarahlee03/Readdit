@@ -38,7 +38,7 @@ public class ReviewsViewHolder extends RecyclerView.ViewHolder{
     TextView summaryt;
     TextView textReviewt;
     ConstraintLayout constraintLayout;
-    int position;
+    protected int position;
 
     public ReviewsViewHolder(@NonNull View itemView) {
         super(itemView);
