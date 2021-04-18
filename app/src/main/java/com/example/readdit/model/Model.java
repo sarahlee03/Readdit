@@ -114,24 +114,6 @@ public class Model {
     }
 
     // reviews
-    public void getAllReviewLikes(String reviewId, final GetReviewLikesListener listener) {
-            modelFirebase.getReviewLikes(reviewId, new GetReviewLikesListener() {
-                @Override
-                public void onComplete(List<ReviewLike> reviewLikes) {
-                    listener.onComplete(reviewLikes);
-                }
-            });
-    }
-
-    public void getAllReviewDislikes(String reviewId, final GetReviewDislikesListener listener) {
-        modelFirebase.getReviewDislikes(reviewId, new GetReviewDislikesListener() {
-            @Override
-            public void onComplete(List<ReviewDislike> reviewDislikes) {
-                listener.onComplete(reviewDislikes);
-            }
-        });
-    }
-
     public LiveData<List<Review>> getAllReviews() {
         if (reviewsList == null) {
             reviewsList = modelSql.getAllReviews();
@@ -252,14 +234,6 @@ public class Model {
 
     public interface GetReviewListener {
         void onComplete(Review review);
-    }
-
-    public interface GetReviewLikesListener {
-        void onComplete(List<ReviewLike> reviewLikes);
-    }
-
-    public interface GetReviewDislikesListener {
-        void onComplete(List<ReviewDislike> reviewDislikes);
     }
 
 }

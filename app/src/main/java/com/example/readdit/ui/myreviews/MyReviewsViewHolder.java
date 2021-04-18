@@ -11,7 +11,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.readdit.R;
 import com.example.readdit.model.Review;
-import com.example.readdit.model.ReviewWithLikesAndDislikes;
 import com.example.readdit.ui.reviews.ReviewsViewHolder;
 import com.squareup.picasso.Picasso;
 
@@ -29,7 +28,7 @@ public class MyReviewsViewHolder extends ReviewsViewHolder {
         });
     }
 
-    public void bindData(ReviewWithLikesAndDislikes review, int position) {
+    public void bindData(Review review, int position) {
         super.bindData(review, position);
     }
 }
