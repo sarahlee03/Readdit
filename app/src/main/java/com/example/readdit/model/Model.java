@@ -194,7 +194,7 @@ public class Model {
                 refreshAllReviews(new GetAllReviewsListener() {
                     @Override
                     public void onComplete() {
-                        listener.onComplete();
+                        if(listener != null) listener.onComplete();
                     }
                 });
             }

@@ -48,6 +48,8 @@ public class ReviewFragment extends Fragment {
     TextView summaryt;
     TextView textReviewt;
     ConstraintLayout constraintLayout;
+    TextView likes;
+    TextView dislikes;
 
     public ReviewFragment() {
         // Required empty public constructor
@@ -78,6 +80,8 @@ public class ReviewFragment extends Fragment {
         summaryt = view.findViewById(R.id.review_row_summaryt_tv);
         textReviewt = view.findViewById(R.id.review_reviewt_tv);
         constraintLayout = view.findViewById(R.id.constraintLayout);
+        likes = view.findViewById(R.id.review_likes_tv);
+        dislikes = view.findViewById(R.id.review_dislikes_tv);
 
         // for review row
         edit.setVisibility(View.GONE);

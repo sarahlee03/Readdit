@@ -38,6 +38,8 @@ public class ReviewsViewHolder extends RecyclerView.ViewHolder{
     TextView summaryt;
     TextView textReviewt;
     ConstraintLayout constraintLayout;
+    TextView likes;
+    TextView dislikes;
     protected int position;
 
     public ReviewsViewHolder(@NonNull View itemView) {
@@ -62,6 +64,8 @@ public class ReviewsViewHolder extends RecyclerView.ViewHolder{
         summaryt = itemView.findViewById(R.id.review_row_summaryt_tv);
         textReviewt = itemView.findViewById(R.id.review_reviewt_tv);
         constraintLayout = itemView.findViewById(R.id.constraintLayout);
+        likes = itemView.findViewById(R.id.review_likes_tv);
+        dislikes = itemView.findViewById(R.id.review_dislikes_tv);
 
         edit.setVisibility(View.GONE);
         delete.setVisibility(View.GONE);
@@ -92,6 +96,8 @@ public class ReviewsViewHolder extends RecyclerView.ViewHolder{
         date.setText(review.getDate());
         rating.setRating((float)review.getRating());
         username.setText(review.getUsername());
+        likes.setText(String.valueOf(review.getLikesCount()));
+        dislikes.setText(String.valueOf(review.getDislikesCount()));
         if(review.getImage() != null) { Picasso.get().load(review.getImage()).placeholder(R.drawable.book_placeholder).into(image); }
         if(review.getUserImage() != null) { Picasso.get().load(review.getUserImage()).placeholder(R.drawable.profile_placeholder).into(userImage); }
         this.position = position;

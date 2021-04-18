@@ -1,8 +1,10 @@
 package com.example.readdit.ui.reviews;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 
+import androidx.annotation.RequiresApi;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
@@ -29,6 +31,7 @@ import com.squareup.picasso.Picasso;
 
 public class ReviewDetailsFragment extends ReviewFragment {
     Review currReview;
+    User currUser;
 
     public ReviewDetailsFragment() {
         // Required empty public constructor
@@ -70,6 +73,8 @@ public class ReviewDetailsFragment extends ReviewFragment {
                             (review.getUsername());
                     summary.setText(review.getSummary());
                     textReview.setText(review.getReview());
+                    likes.setText(String.valueOf(review.getLikesCount()));
+                    dislikes.setText(String.valueOf(review.getDislikesCount()));
                     if(review.getImage() != null) { Picasso.get().load(review.getImage()).placeholder(R.drawable.book_placeholder).into(image); }
                     if(review.getUserImage() != null) { Picasso.get().load(review.getUserImage()).placeholder(R.drawable.profile_placeholder).into(userImage); }
 
@@ -78,6 +83,7 @@ public class ReviewDetailsFragment extends ReviewFragment {
                     ReadditApplication.currUser.observe(getActivity(), new Observer<User>() {
                         @Override
                         public void onChanged(User user) {
+                            currUser = user;
                             if(review.getUserId().equals(user.getUserID())) {
                                 edit.setVisibility(View.VISIBLE);
                                 delete.setVisibility(View.VISIBLE);
@@ -115,12 +121,19 @@ public class ReviewDetailsFragment extends ReviewFragment {
         like.setOnLikeListener(new OnLikeListener() {
             @Override
             public void liked(LikeButton likeButton) {
-
+                if(!currReview.getLikes().contains(currUser.getUserID())) {
+                    currReview.addLike(currUser.getUserID());
+                    Model.instance.editReview(currReview, null);
+                }
             }
 
+            @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void unLiked(LikeButton likeButton) {
-
+                if(currReview.getLikes().contains(currUser.getUserID())) {
+                    currReview.removeLike(currUser.getUserID());
+                    Model.instance.editReview(currReview, null);
+                }
             }
         });
 
