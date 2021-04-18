@@ -48,7 +48,7 @@ public class Review {
     }
 
     public void addLike(String userId) {
-        String str = getLikes().isEmpty() ? userId : "," + userId;
+        String str = getLikes().isEmpty() ? userId : getLikes() + "," + userId;
         setLikes(str);
     }
 
@@ -60,7 +60,7 @@ public class Review {
     }
 
     public void addDislike(String userId) {
-        String str = getDislikes().isEmpty() ? userId : "," + userId;
+        String str = getDislikes().isEmpty() ? userId : getDislikes() + "," + userId;
         setDislikes(str);
     }
 
