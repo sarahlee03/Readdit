@@ -45,7 +45,6 @@ import com.squareup.picasso.Picasso;
 import java.util.regex.Pattern;
 
 import static com.example.readdit.R.layout.new_review_activity;
-import static com.example.readdit.R.layout.review_row;
 
 public class NewReviewActivity extends AppCompatActivity {
     private final int TAKE_PHOTO_CODE = 0;
@@ -75,7 +74,7 @@ public class NewReviewActivity extends AppCompatActivity {
         setTitle("New Review");
 
         busy = findViewById(R.id.newreview_progress);
-        busy.setVisibility(View.INVISIBLE);
+        busy.setVisibility(View.GONE);
         btnSave = findViewById(R.id.newreview_save_button);
         btnCancel = findViewById(R.id.newreview_cancel_button);
         bookImage = findViewById(R.id.newreview_book_img);

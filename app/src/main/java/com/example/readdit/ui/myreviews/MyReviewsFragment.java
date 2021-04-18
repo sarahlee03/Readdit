@@ -51,8 +51,8 @@ public class MyReviewsFragment extends Fragment {
             public void onItemClick(int position) {
                 Log.d("TAG","row was clicked " + position);
                 String id = viewModel.getMyReviews().getValue().get(position).getId();
-                NavDirections action = MyReviewsFragmentDirections.actionNavMyReviewsToReviewFragment(id);
-                Navigation.findNavController(view).navigate(action);
+                MyReviewsFragmentDirections.ActionNavMyReviewsToReviewDetailsFragment direc = MyReviewsFragmentDirections.actionNavMyReviewsToReviewDetailsFragment(id);
+                Navigation.findNavController(view).navigate(direc);
             }
         });
 

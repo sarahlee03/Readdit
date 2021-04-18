@@ -34,7 +34,8 @@ public class ReviewsAdapter extends RecyclerView.Adapter<ReviewsViewHolder>{
     @NonNull
     @Override
     public ReviewsViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = inflater.inflate(R.layout.review_row,parent,false);
+        View view = inflater.inflate(R.layout.fragment_review,parent,false);
+
         ReviewsViewHolder holder = new ReviewsViewHolder(view);
         holder.listener = listener;
         return holder;
