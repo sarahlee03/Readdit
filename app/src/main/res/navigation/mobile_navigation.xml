@@ -11,8 +11,9 @@
         android:label="@string/menu_myreviews"
         tools:layout="@layout/my_reviews_fragment" >
         <action
-            android:id="@+id/action_nav_my_reviews_to_reviewFragment"
-            app:destination="@id/reviewFragment" />
+            android:id="@+id/action_nav_my_reviews_to_reviewDetailsFragment"
+            app:destination="@id/reviewDetailsFragment"
+            app:popUpTo="@id/nav_my_reviews" />
     </fragment>
     <fragment
         android:id="@+id/nav_profile"
@@ -52,8 +53,8 @@
         android:label="Reviews"
         tools:layout="@layout/fragment_reviews" >
         <action
-            android:id="@+id/action_reviewsFragment_to_reviewFragment"
-            app:destination="@id/reviewFragment"
+            android:id="@+id/action_reviewsFragment_to_reviewDetailsFragment"
+            app:destination="@id/reviewDetailsFragment"
             app:popUpTo="@id/reviewsFragment" />
     </fragment>
     <fragment
@@ -63,6 +64,14 @@
         tools:layout="@layout/fragment_review">
         <argument
             android:name="reviewId"
+            app:argType="string" />
+    </fragment>
+    <fragment
+        android:id="@+id/reviewDetailsFragment"
+        android:name="com.example.readdit.ui.reviews.ReviewDetailsFragment"
+        android:label="Review Details"
+        tools:layout="@layout/fragment_review_details" >
+        <argument android:name="reviewId"
             app:argType="string" />
     </fragment>
 

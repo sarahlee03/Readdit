@@ -51,7 +51,7 @@ public class EditReviewActivity extends NewReviewActivity {
                     textReview.setText(review.getReview());
                     if(review.getImage() != null) { Picasso.get().load(review.getImage()).placeholder(R.drawable.book_placeholder).into(bookImage); }
 
-                    busy.setVisibility(View.INVISIBLE);
+                    busy.setVisibility(View.GONE);
                 }
             }
         });

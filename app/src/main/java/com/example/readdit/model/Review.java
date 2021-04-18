@@ -1,13 +1,19 @@
 package com.example.readdit.model;
 
+import android.os.Build;
+
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
 import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.FieldValue;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Entity
@@ -28,6 +34,58 @@ public class Review {
     private String image;
     private boolean isDeleted;
     private Long lastUpdated;
+
+    public String getLikes() {
+        return likes != null ? likes : "";
+    }
+
+    public int getLikesCount() {
+        return getLikes().isEmpty() ? 0 : getLikes().split(",").length;
+    }
+
+    public int getDislikesCount() {
+        return getDislikes().isEmpty() ? 0 : getDislikes().split(",").length;
+    }
+
+    public void addLike(String userId) {
+        String str = getLikes().isEmpty() ? userId : getLikes() + "," + userId;
+        setLikes(str);
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public void removeLike(String userId) {
+        ArrayList<String> str = new ArrayList<String>(Arrays.asList(getLikes().split(",")));
+        str.remove(userId);
+        setLikes(String.join(",", str));
+    }
+
+    public void addDislike(String userId) {
+        String str = getDislikes().isEmpty() ? userId : getDislikes() + "," + userId;
+        setDislikes(str);
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public void removeDislike(String userId) {
+        ArrayList<String> str = new ArrayList<String>(Arrays.asList(getDislikes().split(",")));
+        str.remove(userId);
+        setDislikes(String.join(",", str));
+    }
+
+
+    public void setLikes(String likes) {
+        this.likes = likes;
+    }
+
+    public String getDislikes() {
+        return dislikes != null ? dislikes : "";
+    }
+
+    public void setDislikes(String dislikes) {
+        this.dislikes = dislikes;
+    }
+
+    private String likes;
+    private String dislikes;
 
     public String getImage() {
         return image;
@@ -137,7 +195,8 @@ public class Review {
         result.put("date", date);
         result.put("summary", summary);
         result.put("review", review);
-        result.put("image", image);
+        result.put("likes", likes);
+        result.put("dislikes", dislikes);
         result.put("lastUpdated", FieldValue.serverTimestamp());
         result.put("isDeleted", isDeleted);
         return result;
@@ -165,6 +224,8 @@ public class Review {
         image = (String)map.get("image");
         userImage = (String)map.get("userImage");
         userId = (String)map.get("userId");
+        likes = (String)map.get("likes");
+        dislikes = (String)map.get("dislikes");
         lastUpdated = (Long)((Timestamp)map.get("lastUpdated")).getSeconds();
         isDeleted = ((boolean)map.get("isDeleted"));
         return this;
