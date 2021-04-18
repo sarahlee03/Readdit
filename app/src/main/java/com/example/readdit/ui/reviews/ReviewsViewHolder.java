@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.readdit.R;
 import com.example.readdit.model.Review;
+import com.example.readdit.model.ReviewWithLikesAndDislikes;
 import com.like.LikeButton;
 import com.squareup.picasso.Picasso;
 
@@ -37,6 +38,8 @@ public class ReviewsViewHolder extends RecyclerView.ViewHolder{
     View line;
     TextView summaryt;
     TextView textReviewt;
+    TextView likes;
+    TextView dislikes;
     ConstraintLayout constraintLayout;
     protected int position;
 
@@ -62,6 +65,8 @@ public class ReviewsViewHolder extends RecyclerView.ViewHolder{
         summaryt = itemView.findViewById(R.id.review_row_summaryt_tv);
         textReviewt = itemView.findViewById(R.id.review_reviewt_tv);
         constraintLayout = itemView.findViewById(R.id.constraintLayout);
+        likes = itemView.findViewById(R.id.review_likes_tv);
+        dislikes = itemView.findViewById(R.id.review_dislikes_tv);
 
         edit.setVisibility(View.GONE);
         delete.setVisibility(View.GONE);
@@ -85,7 +90,8 @@ public class ReviewsViewHolder extends RecyclerView.ViewHolder{
         });
     }
 
-    public void bindData(Review review, int position) {
+    public void bindData(ReviewWithLikesAndDislikes reviewWithLikesAndDislikes, int position) {
+        Review review = reviewWithLikesAndDislikes.review;
         book.setText(review.getBook());
         author.setText(review.getAuthor());
         category.setText(review.getCategory());
@@ -94,6 +100,8 @@ public class ReviewsViewHolder extends RecyclerView.ViewHolder{
         username.setText(review.getUsername());
         if(review.getImage() != null) { Picasso.get().load(review.getImage()).placeholder(R.drawable.book_placeholder).into(image); }
         if(review.getUserImage() != null) { Picasso.get().load(review.getUserImage()).placeholder(R.drawable.profile_placeholder).into(userImage); }
+        likes.setText(reviewWithLikesAndDislikes.likes != null ? String.valueOf(reviewWithLikesAndDislikes.likes.size()) : "0");
+        dislikes.setText(reviewWithLikesAndDislikes.dislikes != null ? String.valueOf(reviewWithLikesAndDislikes.dislikes.size()) : "0");
         this.position = position;
     }
 }

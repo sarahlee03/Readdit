@@ -44,7 +44,6 @@ public class ReviewDetailsFragment extends ReviewFragment {
         busy.setVisibility(View.VISIBLE);
         // for review details
         busy.setVisibility(View.VISIBLE);
-        delete.setVisibility(View.VISIBLE);
         like.setEnabled(true);
         dislike.setEnabled(true);
         summary.setVisibility(View.VISIBLE);
@@ -66,8 +65,7 @@ public class ReviewDetailsFragment extends ReviewFragment {
                     category.setText(review.getCategory());
                     date.setText(review.getDate());
                     rating.setRating(((float) review.getRating()));
-                    username.setText
-                            (review.getUsername());
+                    username.setText(review.getUsername());
                     summary.setText(review.getSummary());
                     textReview.setText(review.getReview());
                     if(review.getImage() != null) { Picasso.get().load(review.getImage()).placeholder(R.drawable.book_placeholder).into(image); }
@@ -85,7 +83,7 @@ public class ReviewDetailsFragment extends ReviewFragment {
                         }
                     });
 
-                    busy.setVisibility(View.INVISIBLE);
+                    busy.setVisibility(View.GONE);
                 }
             }
         });

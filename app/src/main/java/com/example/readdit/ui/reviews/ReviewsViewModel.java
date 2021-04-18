@@ -19,5 +19,4 @@ public class ReviewsViewModel extends ViewModel {
     public LiveData<List<Review>> getAllReviews(){
         return reviewsList;
     }
-
 }

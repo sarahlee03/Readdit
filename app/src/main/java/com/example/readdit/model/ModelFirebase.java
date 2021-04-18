@@ -2,9 +2,9 @@ package com.example.readdit.model;
 
 import android.graphics.Bitmap;
 import android.net.Uri;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
+import androidx.lifecycle.LiveData;
 
 import com.example.readdit.ReadditApplication;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -182,6 +182,44 @@ public class ModelFirebase {
                     }
                 });
     }
+
+
+    public void getReviewLikes(String reviewId, final Model.GetReviewLikesListener listener) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection("likes").whereEqualTo("reviewId", reviewId).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                List<ReviewLike> reviewLikes = new ArrayList<ReviewLike>();;
+                if (task.isSuccessful()) {
+                    for (DocumentSnapshot document : task.getResult()) {
+                        ReviewLike reviewLike = new ReviewLike();
+                        reviewLike.fromMap(document.getData());
+                        reviewLikes.add(reviewLike);
+                    }
+                }
+                listener.onComplete(reviewLikes);
+            }
+        });
+    }
+
+    public void getReviewDislikes(String reviewId, final Model.GetReviewDislikesListener listener) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection("dislikes").whereEqualTo("reviewId", reviewId).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                List<ReviewDislike> reviewDislikes = new ArrayList<ReviewDislike>();;
+                if (task.isSuccessful()) {
+                    for (DocumentSnapshot document : task.getResult()) {
+                        ReviewDislike reviewDislike = new ReviewDislike();
+                        reviewDislike.fromMap(document.getData());
+                        reviewDislikes.add(reviewDislike);
+                    }
+                }
+                listener.onComplete(reviewDislikes);
+            }
+        });
+    }
+
 
     interface GetAllReviewsListener{
         void onComplete(List<Review> list);
