@@ -44,7 +44,9 @@ public class Model {
             refreshAllUsers(listener);
         }
         else {
-            listener.onComplete(null);
+            if(listener != null) {
+                listener.onComplete(null);
+            }
         }
 
         return usersList;

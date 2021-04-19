@@ -42,6 +42,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.squareup.picasso.Picasso;
 
+import java.util.Date;
 import java.util.regex.Pattern;
 
 import static com.example.readdit.R.layout.new_review_activity;
@@ -169,7 +170,7 @@ public class NewReviewActivity extends AppCompatActivity {
         // save image
         if (bookImage.getDrawable() != null) {
             Bitmap bitMap = ((BitmapDrawable) bookImage.getDrawable()).getBitmap();
-            Model.instance.uploadImage(bitMap, ReadditApplication.BOOKS_FOLDER, Model.instance.getCurrentUserID() + "/" + review.getBook(), new Model.AsyncListener<String>() {
+            Model.instance.uploadImage(bitMap, ReadditApplication.BOOKS_FOLDER, Model.instance.getCurrentUserID() + "/" + System.currentTimeMillis(), new Model.AsyncListener<String>() {
                 @Override
                 // after image saved
                 public void onComplete(String data) {
@@ -179,8 +180,6 @@ public class NewReviewActivity extends AppCompatActivity {
                         @Override
                         public void onChanged(User user) {
                             if(user != null) {
-                                review.setUserImage(user.getImageUri());
-                                review.setUsername(user.getFullName());
                                 review.setUserId(user.getUserID());
                             }
 
