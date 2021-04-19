@@ -2,6 +2,7 @@ package com.example.readdit.model;
 
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.text.BoringLayout;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -125,41 +126,54 @@ public class ModelFirebase {
     }
     // endregion
 
-    // reviews
-    public void addReview(Review review, Model.AddReviewListener listener) {
+    // region Reviews functions
+    public void addReview(Review review, Model.AsyncListener<Boolean> listener) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         db.collection(REVIEWS_COLLECTION)
                 .add(review.toMap())
                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                     @Override
                     public void onSuccess(DocumentReference documentReference) {
-                        listener.onComplete();
+                        if(listener != null){
+                            listener.onComplete(true);
+                        }
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
+                        if(listener != null){
+                            listener.onComplete(false);
+                        }
                     }
                 });
 
     }
 
-    public void editReview(Review review, Model.AddReviewListener listener) {
+    public void editReview(Review review, Model.AsyncListener<Boolean> listener) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         db.collection(REVIEWS_COLLECTION)
                 .document(String.valueOf(review.getId()))
                 .set(review.toMap())
-                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                .addOnSuccessListener(new OnSuccessListener() {
                     @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        if (listener != null) {
-                            listener.onComplete();
+                    public void onSuccess(Object o) {
+                        if(listener != null){
+                            listener.onComplete(true);
+                        }
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        if(listener != null){
+                            listener.onComplete(false);
                         }
                     }
                 });
     }
 
-    public void getAllReviews(Long lastUpdated, GetAllReviewsListener listener) {
+    public void getAllReviews(Long lastUpdated, Model.AsyncListener<List<Review>> listener) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         Timestamp ts = new Timestamp(lastUpdated, 0);
         db.collection(REVIEWS_COLLECTION)
@@ -183,11 +197,7 @@ public class ModelFirebase {
                 });
     }
 
-    interface GetAllReviewsListener{
-        void onComplete(List<Review> list);
-    }
-
-    public void getReview(String id, final Model.GetReviewListener listener) {
+    public void getReview(String id, Model.AsyncListener<Review> listener) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         db.collection(REVIEWS_COLLECTION).document(id).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
@@ -204,5 +214,5 @@ public class ModelFirebase {
             }
         });
     }
-
+    // endregion
 }

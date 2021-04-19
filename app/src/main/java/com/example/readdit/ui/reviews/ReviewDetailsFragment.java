@@ -121,9 +121,9 @@ public class ReviewDetailsFragment extends ReviewFragment {
         delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                viewModel.deleteReview(currReview, new Model.AddReviewListener() {
+                viewModel.deleteReview(currReview, new Model.AsyncListener() {
                     @Override
-                    public void onComplete() {
+                    public void onComplete(Object data) {
                         Navigation.findNavController(view).popBackStack();
                     }
                 });

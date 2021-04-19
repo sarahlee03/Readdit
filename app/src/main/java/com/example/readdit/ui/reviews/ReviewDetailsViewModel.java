@@ -28,7 +28,7 @@ public class ReviewDetailsViewModel extends ViewModel {
         Model.instance.editReview(review, null);
     }
 
-    public void deleteReview(Review review, Model.AddReviewListener listener) {
+    public void deleteReview(Review review, Model.AsyncListener listener) {
         Model.instance.deleteReview(review, listener);
     }
 

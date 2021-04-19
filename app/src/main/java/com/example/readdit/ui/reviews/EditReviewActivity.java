@@ -100,9 +100,9 @@ public class EditReviewActivity extends NewReviewActivity {
                 // after image saved
                 public void onComplete(String data) {
                     currReview.setImage(data);
-                    viewModel.editReview(currReview, new Model.AddReviewListener() {
+                    viewModel.editReview(currReview, new Model.AsyncListener() {
                         @Override
-                        public void onComplete() {
+                        public void onComplete(Object data) {
                             finish();
                         }
                     });

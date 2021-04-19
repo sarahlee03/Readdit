@@ -190,9 +190,9 @@ public class NewReviewActivity extends AppCompatActivity {
                                 review.setUserId(user.getUserID());
                             }
 
-                            viewModel.addReview(review, new Model.AddReviewListener() {
+                            viewModel.addReview(review, new Model.AsyncListener() {
                                 @Override
-                                public void onComplete() {
+                                public void onComplete(Object data) {
                                     finish();
                                 }
                             });

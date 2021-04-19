@@ -91,9 +91,9 @@ public class ReviewsFragment extends Fragment {
     }
 
     void reloadData(){
-        Model.instance.refreshAllReviews(new Model.GetAllReviewsListener() {
+        Model.instance.refreshAllReviews(new Model.AsyncListener() {
             @Override
-            public void onComplete() {
+            public void onComplete(Object data) {
                 refreshLayout.setRefreshing(false);
             }
         });

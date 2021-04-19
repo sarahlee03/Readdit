@@ -19,7 +19,7 @@ public class EditReviewViewModel extends ViewModel {
     public void uploadImage(Bitmap imageBmp, String folder, String name, Model.AsyncListener<String> listener) {
         Model.instance.uploadImage(imageBmp, folder, name, listener);
     }
-    public void editReview(Review review, Model.AddReviewListener listener) {
+    public void editReview(Review review, Model.AsyncListener listener) {
         Model.instance.editReview(review, listener);
     }
 }
