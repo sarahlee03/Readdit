@@ -31,6 +31,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.example.readdit.R;
 import com.example.readdit.ReadditApplication;
@@ -48,6 +49,7 @@ import java.util.regex.Pattern;
 import static com.example.readdit.R.layout.new_review_activity;
 
 public class NewReviewActivity extends AppCompatActivity {
+    NewReviewViewModel viewModel;
     private final int TAKE_PHOTO_CODE = 0;
     private final int CHOOSE_GALLERY_CODE = 1;
     protected boolean imageSelected = false;
@@ -71,6 +73,7 @@ public class NewReviewActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        viewModel = new ViewModelProvider(this).get(NewReviewViewModel.class);
         setContentView(new_review_activity);
         setTitle("New Review");
 
@@ -155,8 +158,6 @@ public class NewReviewActivity extends AppCompatActivity {
         bookImage.setEnabled(false);
     }
 
-
-
     private void saveReview() {
         if(!isFormValid()) { return; }
         busy();
@@ -170,20 +171,19 @@ public class NewReviewActivity extends AppCompatActivity {
         // save image
         if (bookImage.getDrawable() != null) {
             Bitmap bitMap = ((BitmapDrawable) bookImage.getDrawable()).getBitmap();
-            Model.instance.uploadImage(bitMap, ReadditApplication.BOOKS_FOLDER, Model.instance.getCurrentUserID() + "/" + System.currentTimeMillis(), new Model.AsyncListener<String>() {
+            viewModel.uploadImage(bitMap, ReadditApplication.BOOKS_FOLDER, Model.instance.getCurrentUserID() + "/" + System.currentTimeMillis(), new Model.AsyncListener<String>() {
                 @Override
                 // after image saved
                 public void onComplete(String data) {
-                    // save review with image url - lesson 9 1:15
                     review.setImage(data);
-                    ReadditApplication.currUser.observe(NewReviewActivity.this, new Observer<User>() {
+                    viewModel.getCurrentUser().observe(NewReviewActivity.this, new Observer<User>() {
                         @Override
                         public void onChanged(User user) {
                             if(user != null) {
                                 review.setUserId(user.getUserID());
                             }
 
-                            Model.instance.addReview(review, new Model.AddReviewListener() {
+                            viewModel.addReview(review, new Model.AddReviewListener() {
                                 @Override
                                 public void onComplete() {
                                     finish();

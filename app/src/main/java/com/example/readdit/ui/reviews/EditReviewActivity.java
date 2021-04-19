@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.View;
 
 import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.example.readdit.R;
 import com.example.readdit.ReadditApplication;
@@ -21,6 +22,7 @@ import static com.example.readdit.R.layout.new_review_activity;
 
 public class EditReviewActivity extends NewReviewActivity {
     Review currReview;
+    EditReviewViewModel viewModel;
 
     @Override
     protected void onStart() {
@@ -31,12 +33,13 @@ public class EditReviewActivity extends NewReviewActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setTitle("Edit Review");
+        viewModel = new ViewModelProvider(this).get(EditReviewViewModel.class);
 
         String reviewId = getIntent().getStringExtra("reviewId");
         busy.setVisibility(View.VISIBLE);
         imageSelected = true;
 
-        Model.instance.getReviewById(reviewId).observe(this, new Observer<Review>() {
+        viewModel.getReviewById(reviewId).observe(this, new Observer<Review>() {
             @Override
             public void onChanged(Review review) {
                 if(review != null) {
@@ -80,12 +83,12 @@ public class EditReviewActivity extends NewReviewActivity {
         // save image
         if (bookImage.getDrawable() != null) {
             Bitmap bitMap = ((BitmapDrawable) bookImage.getDrawable()).getBitmap();
-            Model.instance.uploadImage(bitMap, ReadditApplication.BOOKS_FOLDER, Model.instance.getCurrentUserID() + "/" + currReview.getBook(), new Model.AsyncListener<String>() {
+            viewModel.uploadImage(bitMap, ReadditApplication.BOOKS_FOLDER, Model.instance.getCurrentUserID() + "/" + currReview.getBook(), new Model.AsyncListener<String>() {
                 @Override
                 // after image saved
                 public void onComplete(String data) {
                     currReview.setImage(data);
-                    Model.instance.editReview(currReview, new Model.AddReviewListener() {
+                    viewModel.editReview(currReview, new Model.AddReviewListener() {
                         @Override
                         public void onComplete() {
                             finish();
