@@ -192,40 +192,41 @@ public class Model {
         });
     }
 
-            public void editReview(Review review, AsyncListener listener) {
-                modelFirebase.editReview(review, new AsyncListener<Boolean>() {
+    public void editReview(Review review, AsyncListener listener) {
+        modelFirebase.editReview(review, new AsyncListener<Boolean>() {
+            @Override
+            public void onComplete(Boolean data) {
+                refreshAllReviews(new AsyncListener<Boolean>() {
                     @Override
                     public void onComplete(Boolean data) {
+                        if (listener != null) listener.onComplete(data);
+                    }
+                });
+            }
+        });
+    }
+
+    public void deleteReview(Review review, AsyncListener listener) {
+        review.setDeleted(true);
+        // update review with isDeleted=false
+        modelFirebase.editReview(review, new AsyncListener<Boolean>() {
+            @Override
+            public void onComplete(Boolean data) {
+                // delete review image
+                modelFirebase.deleteImage(getCurrentUserID() + "/" + review.getBook(), new AsyncListener<Boolean>() {
+                    @Override
+                    public void onComplete(Boolean data) {
+                        // delete review from sql
                         refreshAllReviews(new AsyncListener<Boolean>() {
                             @Override
                             public void onComplete(Boolean data) {
-                                if (listener != null) listener.onComplete(data);
+                                listener.onComplete(data);
                             }
                         });
                     }
-                });
+                }, BOOKS_FOLDER);
             }
-
-            public void deleteReview(Review review, AsyncListener listener) {
-                review.setDeleted(true);
-                // update review with isDeleted=false
-                modelFirebase.editReview(review, new AsyncListener<Boolean>() {
-                    @Override
-                    public void onComplete(Boolean data) {
-                        // delete review image
-                        modelFirebase.deleteImage(getCurrentUserID() + "/" + review.getBook(), new AsyncListener<Boolean>() {
-                            @Override
-                            public void onComplete(Boolean data) {
-                                // delete review from sql
-                                refreshAllReviews(new AsyncListener<Boolean>() {
-                                    @Override
-                                    public void onComplete(Boolean data) {
-                                        listener.onComplete(data);
-                                    }
-                                });
-                            }
-                        }, BOOKS_FOLDER);
-                    }
-                });
-            }
-        }
+        });
+    }
+    // endregion
+}
