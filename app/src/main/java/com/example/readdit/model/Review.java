@@ -10,8 +10,12 @@ import androidx.room.PrimaryKey;
 import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.FieldValue;
 
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -25,9 +29,7 @@ public class Review {
     private String author;
     private String category;
     private double rating;
-    private String username;
     private String userId;
-    private String userImage;
     private String summary;
     private String review;
     private String date;
@@ -139,6 +141,12 @@ public class Review {
         return date;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public LocalDateTime getDateTime() {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("EEE, d MMM yyyy HH:mm:ss");
+        return LocalDateTime.parse(getDate(), formatter);
+    }
+
     public void setDate(String date) {
         this.date = date;
     }
@@ -149,14 +157,6 @@ public class Review {
 
     public void setRating(double rating) {
         this.rating = rating;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
     }
 
     public String getSummary() {
@@ -189,26 +189,16 @@ public class Review {
         result.put("author", author);
         result.put("category", category);
         result.put("rating", rating);
-        result.put("username", username);
-        result.put("userImage", userImage);
         result.put("userId", userId);
         result.put("date", date);
         result.put("summary", summary);
         result.put("review", review);
         result.put("likes", likes);
         result.put("dislikes", dislikes);
+        result.put("image", image);
         result.put("lastUpdated", FieldValue.serverTimestamp());
         result.put("isDeleted", isDeleted);
         return result;
-    }
-
-    @NonNull
-    public String getUserImage() {
-        return userImage;
-    }
-
-    public void setUserImage(@NonNull String userImage) {
-        this.userImage = userImage;
     }
 
     public Review fromMap(Map<String, Object> map) {
@@ -218,11 +208,9 @@ public class Review {
         category = (String)map.get("category");
         rating = (double)map.get("rating");
         date = (String)map.get("date");
-        username = (String)map.get("username");
         summary = (String)map.get("summary");
         review = (String)map.get("review");
         image = (String)map.get("image");
-        userImage = (String)map.get("userImage");
         userId = (String)map.get("userId");
         likes = (String)map.get("likes");
         dislikes = (String)map.get("dislikes");

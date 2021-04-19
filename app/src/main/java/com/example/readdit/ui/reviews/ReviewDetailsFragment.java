@@ -8,6 +8,7 @@ import androidx.annotation.RequiresApi;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
 
 import android.util.Log;
@@ -30,6 +31,7 @@ import com.like.OnLikeListener;
 import com.squareup.picasso.Picasso;
 
 public class ReviewDetailsFragment extends ReviewFragment {
+    ReviewDetailsViewModel viewModel;
     Review currReview;
     User currUser;
 
@@ -43,6 +45,7 @@ public class ReviewDetailsFragment extends ReviewFragment {
         View view = super.onCreateView(inflater, container, savedInstanceState);
         String reviewId = ReviewFragmentArgs.fromBundle(getArguments()).getReviewId();
         Log.d("TAG","review id is:" + reviewId);
+        viewModel = new ViewModelProvider(this).get(ReviewDetailsViewModel.class);
 
         busy.setVisibility(View.VISIBLE);
         // for review details
@@ -58,7 +61,7 @@ public class ReviewDetailsFragment extends ReviewFragment {
         constraintLayout.setLayoutParams(params);
         line.setVisibility(View.GONE);
 
-        Model.instance.getReviewById(reviewId).observe(getViewLifecycleOwner(), new Observer<Review>() {
+        viewModel.getReviewById(reviewId).observe(getViewLifecycleOwner(), new Observer<Review>() {
             @Override
             public void onChanged(Review review) {
                 if(review != null) {
@@ -68,18 +71,24 @@ public class ReviewDetailsFragment extends ReviewFragment {
                     category.setText(review.getCategory());
                     date.setText(review.getDate());
                     rating.setRating(((float) review.getRating()));
-                    username.setText
-                            (review.getUsername());
                     summary.setText(review.getSummary());
                     textReview.setText(review.getReview());
                     likes.setText(String.valueOf(review.getLikesCount()));
                     dislikes.setText(String.valueOf(review.getDislikesCount()));
                     if(review.getImage() != null) { Picasso.get().load(review.getImage()).placeholder(R.drawable.book_placeholder).into(image); }
-                    if(review.getUserImage() != null) { Picasso.get().load(review.getUserImage()).placeholder(R.drawable.profile_placeholder).into(userImage); }
+
+                    // get the review user for user name and user image
+                    viewModel.getUserById(review.getUserId()).observe(getActivity(), new Observer<User>() {
+                        @Override
+                        public void onChanged(User user) {
+                            username.setText(user.getFullName());
+                            if(user.getImageUri() != null) { Picasso.get().load(user.getImageUri()).placeholder(R.drawable.profile_placeholder).into(userImage); }
+                        }
+                    });
 
                     // edit and delete icons
                     // get the current user
-                    ReadditApplication.currUser.observe(getActivity(), new Observer<User>() {
+                    viewModel.getCurrentUser().observe(getActivity(), new Observer<User>() {
                         @Override
                         public void onChanged(User user) {
                             currUser = user;
@@ -112,9 +121,9 @@ public class ReviewDetailsFragment extends ReviewFragment {
         delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Model.instance.deleteReview(currReview, new Model.AddReviewListener() {
+                viewModel.deleteReview(currReview, new Model.AsyncListener() {
                     @Override
-                    public void onComplete() {
+                    public void onComplete(Object data) {
                         Navigation.findNavController(view).popBackStack();
                     }
                 });
@@ -127,7 +136,7 @@ public class ReviewDetailsFragment extends ReviewFragment {
                 if(!currReview.getLikes().contains(currUser.getUserID()) &&
                         !currReview.getDislikes().contains(currUser.getUserID())) {
                     currReview.addLike(currUser.getUserID());
-                    Model.instance.editReview(currReview, null);
+                    viewModel.editReview(currReview);
                     dislike.setEnabled(false);
                 }
             }
@@ -137,7 +146,7 @@ public class ReviewDetailsFragment extends ReviewFragment {
             public void unLiked(LikeButton likeButton) {
                 if(currReview.getLikes().contains(currUser.getUserID())) {
                     currReview.removeLike(currUser.getUserID());
-                    Model.instance.editReview(currReview, null);
+                    viewModel.editReview(currReview);
                     dislike.setEnabled(true);
                 }
             }
@@ -149,7 +158,7 @@ public class ReviewDetailsFragment extends ReviewFragment {
                 if(!currReview.getDislikes().contains(currUser.getUserID())
                 && !currReview.getLikes().contains(currUser.getUserID())) {
                     currReview.addDislike(currUser.getUserID());
-                    Model.instance.editReview(currReview, null);
+                    viewModel.editReview(currReview);
                     like.setEnabled(false);
                 }
             }
@@ -159,7 +168,7 @@ public class ReviewDetailsFragment extends ReviewFragment {
             public void unLiked(LikeButton likeButton) {
                 if(currReview.getDislikes().contains(currUser.getUserID())) {
                     currReview.removeDislike(currUser.getUserID());
-                    Model.instance.editReview(currReview, null);
+                    viewModel.editReview(currReview);
                     like.setEnabled(true);
                 }
             }

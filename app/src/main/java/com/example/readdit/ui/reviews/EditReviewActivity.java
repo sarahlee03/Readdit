@@ -4,8 +4,12 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
+import android.widget.TextView;
 
 import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.example.readdit.R;
 import com.example.readdit.ReadditApplication;
@@ -21,6 +25,7 @@ import static com.example.readdit.R.layout.new_review_activity;
 
 public class EditReviewActivity extends NewReviewActivity {
     Review currReview;
+    EditReviewViewModel viewModel;
 
     @Override
     protected void onStart() {
@@ -31,12 +36,13 @@ public class EditReviewActivity extends NewReviewActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setTitle("Edit Review");
+        viewModel = new ViewModelProvider(this).get(EditReviewViewModel.class);
 
         String reviewId = getIntent().getStringExtra("reviewId");
         busy.setVisibility(View.VISIBLE);
         imageSelected = true;
 
-        Model.instance.getReviewById(reviewId).observe(this, new Observer<Review>() {
+        viewModel.getReviewById(reviewId).observe(this, new Observer<Review>() {
             @Override
             public void onChanged(Review review) {
                 if(review != null) {
@@ -45,12 +51,12 @@ public class EditReviewActivity extends NewReviewActivity {
                     book.setEnabled(false);
                     author.setText(review.getAuthor());
                     author.setEnabled(false);
-                    category.setText(review.getCategory());
+                    //category.setText(review.getCategory());
                     rating.setRating(((float) review.getRating()));
                     summary.setText(review.getSummary());
                     textReview.setText(review.getReview());
                     if(review.getImage() != null) { Picasso.get().load(review.getImage()).placeholder(R.drawable.book_placeholder).into(bookImage); }
-
+                    category.setSelection(getIndex(category, review.getCategory()));
                     busy.setVisibility(View.GONE);
                 }
             }
@@ -70,24 +76,33 @@ public class EditReviewActivity extends NewReviewActivity {
         });
     }
 
+    private int getIndex(Spinner spinner, String myString){
+        for (int i=0;i<spinner.getCount();i++){
+            if (spinner.getItemAtPosition(i).toString().equalsIgnoreCase(myString)){
+                return i;
+            }
+        }
+        return 0;
+    }
+
     private void editReview() {
         if(!isFormValid()) { return; }
         busy();
-        currReview.setCategory(category.getText().toString());
+        currReview.setCategory(((TextView)category.getSelectedView()).getText().toString());
         currReview.setRating(rating.getRating());
         currReview.setSummary(summary.getText().toString());
         currReview.setReview(textReview.getText().toString());
         // save image
         if (bookImage.getDrawable() != null) {
             Bitmap bitMap = ((BitmapDrawable) bookImage.getDrawable()).getBitmap();
-            Model.instance.uploadImage(bitMap, ReadditApplication.BOOKS_FOLDER, Model.instance.getCurrentUserID() + "/" + currReview.getBook(), new Model.AsyncListener<String>() {
+            viewModel.uploadImage(bitMap, ReadditApplication.BOOKS_FOLDER, Model.instance.getCurrentUserID() + "/" + currReview.getBook(), new Model.AsyncListener<String>() {
                 @Override
                 // after image saved
                 public void onComplete(String data) {
                     currReview.setImage(data);
-                    Model.instance.editReview(currReview, new Model.AddReviewListener() {
+                    viewModel.editReview(currReview, new Model.AsyncListener() {
                         @Override
-                        public void onComplete() {
+                        public void onComplete(Object data) {
                             finish();
                         }
                     });

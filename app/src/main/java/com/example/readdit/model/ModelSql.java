@@ -1,6 +1,7 @@
 package com.example.readdit.model;
 
 import android.os.AsyncTask;
+import android.text.BoringLayout;
 
 import androidx.lifecycle.LiveData;
 
@@ -8,7 +9,7 @@ import java.util.List;
 
 public class ModelSql {
 
-    // reviews
+    // region Reviews
     public LiveData<List<Review>> getAllReviews(){
         return AppLocalDB.db.reviewDao().getAllReviews();
     }
@@ -21,7 +22,7 @@ public class ModelSql {
         return AppLocalDB.db.reviewDao().getReviewById(id);
     }
 
-    public void addReview(final Review review, final Model.AddReviewListener listener){
+    public void addReview(final Review review, Model.AsyncListener listener){
         class MyAsyncTask extends AsyncTask {
             @Override
             protected Object doInBackground(Object[] objects) {
@@ -33,7 +34,7 @@ public class ModelSql {
             protected void onPostExecute(Object o) {
                 super.onPostExecute(o);
                 if (listener != null){
-                    listener.onComplete();
+                    listener.onComplete(null);
                 }
             }
         };
@@ -41,8 +42,7 @@ public class ModelSql {
         task.execute();
     }
 
-
-    public void deleteReview(Review review, Model.AddReviewListener listener) {
+    public void deleteReview(Review review, Model.AsyncListener listener) {
         class MyAsyncTask extends AsyncTask {
             @Override
             protected Object doInBackground(Object[] objects) {
@@ -55,7 +55,7 @@ public class ModelSql {
                 super.onPostExecute(o);
 
                 if (listener != null) {
-                    listener.onComplete();
+                    listener.onComplete(null);
                 }
 
             }
@@ -64,7 +64,9 @@ public class ModelSql {
         task.execute();
     }
 
-    // users
+    // endregion
+
+    // region Users
     public LiveData<User> getUserById(String id) {
         return AppLocalDB.db.userDao().getUserByUID(id);
     }
@@ -109,4 +111,6 @@ public class ModelSql {
 
         new MyAsyncTask().execute();
     }
+
+    // endregion
 }

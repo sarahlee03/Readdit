@@ -1,6 +1,5 @@
 package com.example.readdit.ui.reviews;
 
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -15,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.readdit.R;
 import com.example.readdit.model.Model;
 import com.example.readdit.model.Review;
+import com.example.readdit.model.ReviewWithUserDetails;
 import com.like.LikeButton;
 import com.squareup.picasso.Picasso;
 
@@ -90,7 +90,8 @@ public class ReviewsViewHolder extends RecyclerView.ViewHolder{
         });
     }
 
-    public void bindData(Review review, int position) {
+    public void bindData(ReviewWithUserDetails reviewWithUserDetails, int position) {
+        Review review = reviewWithUserDetails.getReview();
         like.setLiked(review.getLikes().contains(Model.instance.getCurrentUserID()));
         dislike.setLiked(review.getDislikes().contains(Model.instance.getCurrentUserID()));
         book.setText(review.getBook());
@@ -98,11 +99,11 @@ public class ReviewsViewHolder extends RecyclerView.ViewHolder{
         category.setText(review.getCategory());
         date.setText(review.getDate());
         rating.setRating((float)review.getRating());
-        username.setText(review.getUsername());
+        username.setText(reviewWithUserDetails.getUsername());
         likes.setText(String.valueOf(review.getLikesCount()));
         dislikes.setText(String.valueOf(review.getDislikesCount()));
         if(review.getImage() != null) { Picasso.get().load(review.getImage()).placeholder(R.drawable.book_placeholder).into(image); }
-        if(review.getUserImage() != null) { Picasso.get().load(review.getUserImage()).placeholder(R.drawable.profile_placeholder).into(userImage); }
+        if(reviewWithUserDetails.getUserImage() != null) { Picasso.get().load(reviewWithUserDetails.getUserImage()).placeholder(R.drawable.profile_placeholder).into(userImage); }
         this.position = position;
     }
 }

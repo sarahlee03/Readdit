@@ -1,18 +1,11 @@
 package com.example.readdit.ui.myreviews;
 
-import android.util.Log;
 import android.view.View;
-import android.widget.ImageView;
-import android.widget.RatingBar;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.readdit.R;
-import com.example.readdit.model.Review;
+import com.example.readdit.model.ReviewWithUserDetails;
 import com.example.readdit.ui.reviews.ReviewsViewHolder;
-import com.squareup.picasso.Picasso;
 
 public class MyReviewsViewHolder extends ReviewsViewHolder {
     public MyReviewsAdapter.OnItemClickListener listener;
@@ -28,7 +21,7 @@ public class MyReviewsViewHolder extends ReviewsViewHolder {
         });
     }
 
-    public void bindData(Review review, int position) {
+    public void bindData(ReviewWithUserDetails review, int position) {
         super.bindData(review, position);
     }
 }

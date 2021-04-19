@@ -15,6 +15,7 @@ import android.provider.MediaStore;
 import android.util.Patterns;
 import android.view.Gravity;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -31,7 +32,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 
+import com.example.readdit.MainActivity;
 import com.example.readdit.R;
 import com.example.readdit.ReadditApplication;
 import com.example.readdit.SignUpActivity;
@@ -42,11 +45,13 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.squareup.picasso.Picasso;
 
+import java.util.Date;
 import java.util.regex.Pattern;
 
 import static com.example.readdit.R.layout.new_review_activity;
 
 public class NewReviewActivity extends AppCompatActivity {
+    NewReviewViewModel viewModel;
     private final int TAKE_PHOTO_CODE = 0;
     private final int CHOOSE_GALLERY_CODE = 1;
     protected boolean imageSelected = false;
@@ -55,7 +60,7 @@ public class NewReviewActivity extends AppCompatActivity {
     protected ImageView bookImage;
     protected EditText book;
     protected EditText author;
-    protected EditText category;
+    protected Spinner category;
     protected RatingBar rating;
     protected EditText summary;
     protected EditText textReview;
@@ -70,8 +75,10 @@ public class NewReviewActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        viewModel = new ViewModelProvider(this).get(NewReviewViewModel.class);
         setContentView(new_review_activity);
         setTitle("New Review");
+        mAuth = FirebaseAuth.getInstance();
 
         busy = findViewById(R.id.newreview_progress);
         busy.setVisibility(View.GONE);
@@ -80,12 +87,16 @@ public class NewReviewActivity extends AppCompatActivity {
         bookImage = findViewById(R.id.newreview_book_img);
         book = findViewById(R.id.newreview_bookname_et);
         author = findViewById(R.id.newreview_author_et);
-        category = findViewById(R.id.newreview_category_et);
+        category = findViewById(R.id.newreview_category_spinner);
         rating = findViewById(R.id.newreview_ratingbar);
         summary = findViewById(R.id.newreview_summary_et);
         textReview = findViewById(R.id.newreview_review_et);
 
-        mAuth = FirebaseAuth.getInstance();
+        String[] categories = new String[]{"Fantasy", "Action", "Comedy", "Drama", "Horror", "Romance"};
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
+                android.R.layout.simple_spinner_item, categories);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        category.setAdapter(adapter);
 
         btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -125,9 +136,9 @@ public class NewReviewActivity extends AppCompatActivity {
             isValid = false;
             author.setError("Author name cannot be empty");
         }
-        if(category.getText().toString().isEmpty()){
+        if(((TextView)category.getSelectedView()).getText().toString().isEmpty()){
             isValid = false;
-            category.setError("Category cannot be empty");
+            ((TextView)category.getSelectedView()).setError("Category cannot be empty");
         }
         if(summary.getText().toString().isEmpty()){
             isValid = false;
@@ -154,39 +165,34 @@ public class NewReviewActivity extends AppCompatActivity {
         bookImage.setEnabled(false);
     }
 
-
-
     private void saveReview() {
         if(!isFormValid()) { return; }
         busy();
         Review review = new Review();
         review.setBook(book.getText().toString());
         review.setAuthor(author.getText().toString());
-        review.setCategory(category.getText().toString());
+        review.setCategory(((TextView)category.getSelectedView()).getText().toString());
         review.setRating(rating.getRating());
         review.setSummary(summary.getText().toString());
         review.setReview(textReview.getText().toString());
         // save image
         if (bookImage.getDrawable() != null) {
             Bitmap bitMap = ((BitmapDrawable) bookImage.getDrawable()).getBitmap();
-            Model.instance.uploadImage(bitMap, ReadditApplication.BOOKS_FOLDER, Model.instance.getCurrentUserID() + "/" + review.getBook(), new Model.AsyncListener<String>() {
+            viewModel.uploadImage(bitMap, ReadditApplication.BOOKS_FOLDER, Model.instance.getCurrentUserID() + "/" + System.currentTimeMillis(), new Model.AsyncListener<String>() {
                 @Override
                 // after image saved
                 public void onComplete(String data) {
-                    // save review with image url - lesson 9 1:15
                     review.setImage(data);
-                    ReadditApplication.currUser.observe(NewReviewActivity.this, new Observer<User>() {
+                    viewModel.getCurrentUser().observe(NewReviewActivity.this, new Observer<User>() {
                         @Override
                         public void onChanged(User user) {
                             if(user != null) {
-                                review.setUserImage(user.getImageUri());
-                                review.setUsername(user.getFullName());
                                 review.setUserId(user.getUserID());
                             }
 
-                            Model.instance.addReview(review, new Model.AddReviewListener() {
+                            viewModel.addReview(review, new Model.AsyncListener() {
                                 @Override
-                                public void onComplete() {
+                                public void onComplete(Object data) {
                                     finish();
                                 }
                             });

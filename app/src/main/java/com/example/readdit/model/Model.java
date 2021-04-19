@@ -2,6 +2,7 @@ package com.example.readdit.model;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.text.BoringLayout;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Observer;
@@ -44,7 +45,9 @@ public class Model {
             refreshAllUsers(listener);
         }
         else {
-            listener.onComplete(null);
+            if(listener != null) {
+                listener.onComplete(null);
+            }
         }
 
         return usersList;
@@ -113,7 +116,9 @@ public class Model {
         refreshAllUsers(null);
     }
 
-    // reviews
+    // endregion
+
+    // region Reviews
     public LiveData<List<Review>> getAllReviews() {
         if (reviewsList == null) {
             reviewsList = modelSql.getAllReviews();
@@ -123,18 +128,16 @@ public class Model {
     }
 
     public LiveData<List<Review>> getMyReviews() {
-        if (myReviewsList == null) {
-            myReviewsList = modelSql.getReviewsByUserId(getCurrentUserID());
-            refreshAllReviews(null);
-        }
+        myReviewsList = modelSql.getReviewsByUserId(getCurrentUserID());
+        refreshAllReviews(null);
         return myReviewsList;
     }
 
-    public void refreshAllReviews(final GetAllReviewsListener listener) {
+    public void refreshAllReviews(AsyncListener listener) {
         Long lastUpdated = ReadditApplication.context
                 .getSharedPreferences("TAG", Context.MODE_PRIVATE)
                 .getLong("reviewsLastUpdateDate", 0);
-        modelFirebase.getAllReviews(lastUpdated, new ModelFirebase.GetAllReviewsListener() {
+        modelFirebase.getAllReviews(lastUpdated, new AsyncListener<List<Review>>() {
             @Override
             public void onComplete(List<Review> data) {
                 long lastUpdated = 0;
@@ -158,7 +161,7 @@ public class Model {
                         .apply();
 
                 if (listener != null) {
-                    listener.onComplete();
+                    listener.onComplete(null);
                 }
             }
         });
@@ -168,72 +171,61 @@ public class Model {
         return modelSql.getReviewById(id);
     }
 
-    public void addReview(final Review review, final AddReviewListener listener) {
+    public void addReview(final Review review, AsyncListener listener) {
         // save date
         SimpleDateFormat format = new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss");
         String dateString = format.format(new Date());
         review.setDate(dateString);
         // add review
-        modelFirebase.addReview(review, new AddReviewListener() {
+        modelFirebase.addReview(review, new AsyncListener<Boolean>() {
             @Override
-            public void onComplete() {
-                refreshAllReviews(new GetAllReviewsListener() {
+            public void onComplete(Boolean data) {
+                refreshAllReviews(new AsyncListener() {
                     @Override
-                    public void onComplete() {
-                        listener.onComplete();
+                    public void onComplete(Object data) {
+                        if (listener != null) {
+                            listener.onComplete(data);
+                        }
                     }
                 });
             }
         });
     }
 
-    public void editReview(Review review, final AddReviewListener listener) {
-        modelFirebase.editReview(review, new AddReviewListener() {
-            @Override
-            public void onComplete() {
-                refreshAllReviews(new GetAllReviewsListener() {
-                    @Override
-                    public void onComplete() {
-                        if(listener != null) listener.onComplete();
-                    }
-                });
-            }
-        });
-    }
-
-    public void deleteReview(Review review, final AddReviewListener listener) {
-        review.setDeleted(true);
-        // update review with isDeleted=false
-        modelFirebase.editReview(review, new AddReviewListener() {
-            @Override
-            public void onComplete() {
-                // delete review image
-                modelFirebase.deleteImage(getCurrentUserID() + "/" + review.getBook(), new AsyncListener<Boolean>() {
+            public void editReview(Review review, AsyncListener listener) {
+                modelFirebase.editReview(review, new AsyncListener<Boolean>() {
                     @Override
                     public void onComplete(Boolean data) {
-                        // delete review from sql
-                        refreshAllReviews(new GetAllReviewsListener() {
+                        refreshAllReviews(new AsyncListener<Boolean>() {
                             @Override
-                            public void onComplete() {
-                                listener.onComplete();
+                            public void onComplete(Boolean data) {
+                                if (listener != null) listener.onComplete(data);
                             }
                         });
                     }
-                }, BOOKS_FOLDER);
+                });
             }
-        });
-    }
 
-    public interface AddReviewListener {
-        void onComplete();
-    }
-
-    public interface GetAllReviewsListener{
-        void onComplete();
-    }
-
-    public interface GetReviewListener {
-        void onComplete(Review review);
-    }
-
-}
+            public void deleteReview(Review review, AsyncListener listener) {
+                review.setDeleted(true);
+                // update review with isDeleted=false
+                modelFirebase.editReview(review, new AsyncListener<Boolean>() {
+                    @Override
+                    public void onComplete(Boolean data) {
+                        // delete review image
+                        modelFirebase.deleteImage(getCurrentUserID() + "/" + review.getBook(), new AsyncListener<Boolean>() {
+                            @Override
+                            public void onComplete(Boolean data) {
+                                // delete review from sql
+                                refreshAllReviews(new AsyncListener<Boolean>() {
+                                    @Override
+                                    public void onComplete(Boolean data) {
+                                        listener.onComplete(data);
+                                    }
+                                });
+                            }
+                        }, BOOKS_FOLDER);
+                    }
+                });
+            }
+        }

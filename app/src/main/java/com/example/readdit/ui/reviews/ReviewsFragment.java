@@ -23,6 +23,7 @@ import android.view.ViewGroup;
 import com.example.readdit.R;
 import com.example.readdit.model.Model;
 import com.example.readdit.model.Review;
+import com.example.readdit.model.User;
 
 import java.util.List;
 
@@ -78,13 +79,21 @@ public class ReviewsFragment extends Fragment {
             }
         });
 
+        viewModel.getAllUsers().observe(getViewLifecycleOwner(), new Observer<List<User>>() {
+            @Override
+            public void onChanged(List<User> users) {
+                adapter.notifyDataSetChanged();
+            }
+        });
+
+
         return view;
     }
 
     void reloadData(){
-        Model.instance.refreshAllReviews(new Model.GetAllReviewsListener() {
+        Model.instance.refreshAllReviews(new Model.AsyncListener() {
             @Override
-            public void onComplete() {
+            public void onComplete(Object data) {
                 refreshLayout.setRefreshing(false);
             }
         });
