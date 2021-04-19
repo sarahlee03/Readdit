@@ -4,6 +4,9 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
+import android.widget.TextView;
 
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -48,12 +51,12 @@ public class EditReviewActivity extends NewReviewActivity {
                     book.setEnabled(false);
                     author.setText(review.getAuthor());
                     author.setEnabled(false);
-                    category.setText(review.getCategory());
+                    //category.setText(review.getCategory());
                     rating.setRating(((float) review.getRating()));
                     summary.setText(review.getSummary());
                     textReview.setText(review.getReview());
                     if(review.getImage() != null) { Picasso.get().load(review.getImage()).placeholder(R.drawable.book_placeholder).into(bookImage); }
-
+                    category.setSelection(getIndex(category, review.getCategory()));
                     busy.setVisibility(View.GONE);
                 }
             }
@@ -73,10 +76,19 @@ public class EditReviewActivity extends NewReviewActivity {
         });
     }
 
+    private int getIndex(Spinner spinner, String myString){
+        for (int i=0;i<spinner.getCount();i++){
+            if (spinner.getItemAtPosition(i).toString().equalsIgnoreCase(myString)){
+                return i;
+            }
+        }
+        return 0;
+    }
+
     private void editReview() {
         if(!isFormValid()) { return; }
         busy();
-        currReview.setCategory(category.getText().toString());
+        currReview.setCategory(((TextView)category.getSelectedView()).getText().toString());
         currReview.setRating(rating.getRating());
         currReview.setSummary(summary.getText().toString());
         currReview.setReview(textReview.getText().toString());
