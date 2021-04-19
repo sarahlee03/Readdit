@@ -125,10 +125,8 @@ public class Model {
     }
 
     public LiveData<List<Review>> getMyReviews() {
-        if (myReviewsList == null) {
-            myReviewsList = modelSql.getReviewsByUserId(getCurrentUserID());
-            refreshAllReviews(null);
-        }
+        myReviewsList = modelSql.getReviewsByUserId(getCurrentUserID());
+        refreshAllReviews(null);
         return myReviewsList;
     }
 
