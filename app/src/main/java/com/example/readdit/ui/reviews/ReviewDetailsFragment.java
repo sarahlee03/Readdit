@@ -88,7 +88,7 @@ public class ReviewDetailsFragment extends ReviewFragment {
 
                     // edit and delete icons
                     // get the current user
-                    ReadditApplication.currUser.observe(getActivity(), new Observer<User>() {
+                    viewModel.getCurrentUser().observe(getActivity(), new Observer<User>() {
                         @Override
                         public void onChanged(User user) {
                             currUser = user;
@@ -121,7 +121,7 @@ public class ReviewDetailsFragment extends ReviewFragment {
         delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Model.instance.deleteReview(currReview, new Model.AddReviewListener() {
+                viewModel.deleteReview(currReview, new Model.AddReviewListener() {
                     @Override
                     public void onComplete() {
                         Navigation.findNavController(view).popBackStack();
@@ -136,7 +136,7 @@ public class ReviewDetailsFragment extends ReviewFragment {
                 if(!currReview.getLikes().contains(currUser.getUserID()) &&
                         !currReview.getDislikes().contains(currUser.getUserID())) {
                     currReview.addLike(currUser.getUserID());
-                    Model.instance.editReview(currReview, null);
+                    viewModel.editReview(currReview);
                     dislike.setEnabled(false);
                 }
             }
@@ -146,7 +146,7 @@ public class ReviewDetailsFragment extends ReviewFragment {
             public void unLiked(LikeButton likeButton) {
                 if(currReview.getLikes().contains(currUser.getUserID())) {
                     currReview.removeLike(currUser.getUserID());
-                    Model.instance.editReview(currReview, null);
+                    viewModel.editReview(currReview);
                     dislike.setEnabled(true);
                 }
             }
@@ -158,7 +158,7 @@ public class ReviewDetailsFragment extends ReviewFragment {
                 if(!currReview.getDislikes().contains(currUser.getUserID())
                 && !currReview.getLikes().contains(currUser.getUserID())) {
                     currReview.addDislike(currUser.getUserID());
-                    Model.instance.editReview(currReview, null);
+                    viewModel.editReview(currReview);
                     like.setEnabled(false);
                 }
             }
@@ -168,7 +168,7 @@ public class ReviewDetailsFragment extends ReviewFragment {
             public void unLiked(LikeButton likeButton) {
                 if(currReview.getDislikes().contains(currUser.getUserID())) {
                     currReview.removeDislike(currUser.getUserID());
-                    Model.instance.editReview(currReview, null);
+                    viewModel.editReview(currReview);
                     like.setEnabled(true);
                 }
             }
