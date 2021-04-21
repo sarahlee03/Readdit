@@ -81,8 +81,10 @@ public class ReviewDetailsFragment extends ReviewFragment {
                     viewModel.getUserById(review.getUserId()).observe(getActivity(), new Observer<User>() {
                         @Override
                         public void onChanged(User user) {
-                            username.setText(user.getFullName());
-                            if(user.getImageUri() != null) { Picasso.get().load(user.getImageUri()).placeholder(R.drawable.profile_placeholder).into(userImage); }
+                            if (user != null) {
+                                username.setText(user.getFullName());
+                                if(user.getImageUri() != null) { Picasso.get().load(user.getImageUri()).placeholder(R.drawable.profile_placeholder).into(userImage); }
+                            }
                         }
                     });
 
@@ -91,15 +93,17 @@ public class ReviewDetailsFragment extends ReviewFragment {
                     viewModel.getCurrentUser().observe(getActivity(), new Observer<User>() {
                         @Override
                         public void onChanged(User user) {
-                            currUser = user;
-                            if(review.getUserId().equals(user.getUserID())) {
-                                edit.setVisibility(View.VISIBLE);
-                                delete.setVisibility(View.VISIBLE);
+                            if (user != null) {
+                                currUser = user;
+                                if(review.getUserId().equals(user.getUserID())) {
+                                    edit.setVisibility(View.VISIBLE);
+                                    delete.setVisibility(View.VISIBLE);
+                                }
+                                like.setLiked(review.getLikes().contains(user.getUserID()));
+                                like.setEnabled(!review.getDislikes().contains(user.getUserID()));
+                                dislike.setLiked(review.getDislikes().contains(user.getUserID()));
+                                dislike.setEnabled(!review.getLikes().contains(user.getUserID()));
                             }
-                            like.setLiked(review.getLikes().contains(user.getUserID()));
-                            like.setEnabled(!review.getDislikes().contains(user.getUserID()));
-                            dislike.setLiked(review.getDislikes().contains(user.getUserID()));
-                            dislike.setEnabled(!review.getLikes().contains(user.getUserID()));
                         }
                     });
 
