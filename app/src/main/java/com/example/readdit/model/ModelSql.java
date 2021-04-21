@@ -22,6 +22,29 @@ public class ModelSql {
         return AppLocalDB.db.reviewDao().getReviewById(id);
     }
 
+    public void getReviewsListByUID(String userId, Model.AsyncListener<List<Review>> listener) {
+        class MyAsyncTask extends AsyncTask {
+            List<Review> reviews;
+
+            @Override
+            protected Object doInBackground(Object[] objects) {
+                reviews = AppLocalDB.db.reviewDao().getReviewsListByUserId(userId);
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(Object o) {
+                super.onPostExecute(o);
+
+                if (listener != null) {
+                    listener.onComplete(reviews);
+                }
+            }
+        }
+
+        new MyAsyncTask().execute();
+    }
+
     public void addReview(final Review review, Model.AsyncListener listener){
         class MyAsyncTask extends AsyncTask {
             @Override

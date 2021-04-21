@@ -7,7 +7,9 @@ import android.text.BoringLayout;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Observer;
 
+import com.example.readdit.MainActivity;
 import com.example.readdit.ReadditApplication;
+import com.example.readdit.ui.reviews.ReviewDetailsViewModel;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -227,6 +229,10 @@ public class Model {
                 }, BOOKS_FOLDER);
             }
         });
+    }
+
+    public void getReviewsListByUID(String userId, AsyncListener<List<Review>> listener) {
+        modelSql.getReviewsListByUID(userId, listener);
     }
     // endregion
 }
