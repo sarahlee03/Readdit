@@ -54,8 +54,9 @@ public class SignInActivity extends AppCompatActivity {
         btnSignIn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //TODO: Check if form is empty
-                signIn();
+                if(isFormValid()) {
+                    signIn();
+                }
             }
         });
 
@@ -68,6 +69,24 @@ public class SignInActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+    }
+
+    private boolean isFormValid() {
+        txtlayoutEmail.setError("");
+        txtlayoutPassword.setError("");
+        boolean isValid = true;
+
+        if (txtlayoutEmail.getEditText().getText().toString().isEmpty()) {
+            isValid = false;
+            txtlayoutEmail.setError("Email can not be empty");
+        }
+
+        if (txtlayoutPassword.getEditText().getText().toString().isEmpty()) {
+            isValid = false;
+            txtlayoutPassword.setError("Password can not be empty");
+        }
+
+        return isValid;
     }
 
     private void signIn() {

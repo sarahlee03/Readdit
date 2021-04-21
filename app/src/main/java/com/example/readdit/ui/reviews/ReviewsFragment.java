@@ -91,10 +91,15 @@ public class ReviewsFragment extends Fragment {
     }
 
     void reloadData(){
-        Model.instance.refreshAllReviews(new Model.AsyncListener() {
+        Model.instance.refreshAllUsers(new Model.AsyncListener() {
             @Override
             public void onComplete(Object data) {
-                refreshLayout.setRefreshing(false);
+                Model.instance.refreshAllReviews(new Model.AsyncListener() {
+                    @Override
+                    public void onComplete(Object data) {
+                        refreshLayout.setRefreshing(false);
+                    }
+                });
             }
         });
     }
