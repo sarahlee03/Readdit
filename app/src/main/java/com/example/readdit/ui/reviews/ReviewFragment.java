@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RatingBar;
 import android.widget.TextView;
@@ -45,8 +46,8 @@ public class ReviewFragment extends Fragment {
     LikeButton dislike;
     View line;
     View view;
-    TextView summaryt;
-    TextView textReviewt;
+    LinearLayout summaryLayout;
+    LinearLayout reviewLayout;
     ConstraintLayout constraintLayout;
     TextView likes;
     TextView dislikes;
@@ -77,8 +78,8 @@ public class ReviewFragment extends Fragment {
         line = view.findViewById(R.id.review_line);
         like = view.findViewById(R.id.review_like_button);
         dislike = view.findViewById(R.id.review_dislike_button);
-        summaryt = view.findViewById(R.id.review_row_summaryt_tv);
-        textReviewt = view.findViewById(R.id.review_reviewt_tv);
+        summaryLayout = view.findViewById(R.id.layout_summary);
+        reviewLayout = view.findViewById(R.id.layout_review);
         constraintLayout = view.findViewById(R.id.constraintLayout);
         likes = view.findViewById(R.id.review_likes_tv);
         dislikes = view.findViewById(R.id.review_dislikes_tv);
@@ -89,10 +90,8 @@ public class ReviewFragment extends Fragment {
         busy.setVisibility(View.GONE);
         like.setEnabled(false);
         dislike.setEnabled(false);
-        summary.setVisibility(View.GONE);
-        textReview.setVisibility(View.GONE);
-        summaryt.setVisibility(View.GONE);
-        textReviewt.setVisibility(View.GONE);
+        summaryLayout.setVisibility(View.GONE);
+        reviewLayout.setVisibility(View.GONE);
         ConstraintLayout.LayoutParams params = new ConstraintLayout
                 .LayoutParams(ConstraintLayout.LayoutParams.MATCH_PARENT, ConstraintLayout.LayoutParams.WRAP_CONTENT);
         constraintLayout.setLayoutParams(params);

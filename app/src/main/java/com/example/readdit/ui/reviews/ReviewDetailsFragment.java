@@ -52,10 +52,8 @@ public class ReviewDetailsFragment extends ReviewFragment {
         busy.setVisibility(View.VISIBLE);
         like.setEnabled(true);
         dislike.setEnabled(true);
-        summary.setVisibility(View.VISIBLE);
-        textReview.setVisibility(View.VISIBLE);
-        summaryt.setVisibility(View.VISIBLE);
-        textReviewt.setVisibility(View.VISIBLE);
+        summaryLayout.setVisibility(View.VISIBLE);
+        reviewLayout.setVisibility(View.VISIBLE);
         ConstraintLayout.LayoutParams params = new ConstraintLayout
                 .LayoutParams(ConstraintLayout.LayoutParams.MATCH_PARENT, ConstraintLayout.LayoutParams.MATCH_PARENT);
         constraintLayout.setLayoutParams(params);
